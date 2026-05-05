@@ -558,15 +558,21 @@ html[dir="rtl"] .language-dropdown-option.is-selected {
 .brand-mark {
   display: grid;
   place-items: center;
-  width: 86px;
-  height: 86px;
-  border-radius: 50%;
+  width: 124px;
+  height: 124px;
   flex: 0 0 auto;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.92);
+  border-radius: 50%;
+  background-image: url("./assets/logo/logo.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
 }
 
 .brand-mark svg {
-  width: 100%;
-  height: 100%;
+  display: none;
 }
 
 .logo-disc {
@@ -903,6 +909,52 @@ html[dir="rtl"] .language-dropdown-option.is-selected {
   max-width: 56ch;
 }
 
+.about-socials {
+  display: grid;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.about-socials-title {
+  margin: 0;
+  color: rgba(244, 239, 232, 0.68);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  padding: 12px 18px;
+  border: 1px solid rgba(244, 239, 232, 0.2);
+  color: #f4efe8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.social-link:hover,
+.social-link:focus-visible {
+  border-color: rgba(197, 167, 111, 0.72);
+  background: rgba(197, 167, 111, 0.12);
+  transform: translateY(-2px);
+}
+
 .about-visual {
   position: relative;
 }
@@ -1210,8 +1262,8 @@ html[dir="rtl"] .language-dropdown-option.is-selected {
 }
 
 .brand-footer .brand-mark {
-  width: 96px;
-  height: 96px;
+  width: 132px;
+  height: 132px;
 }
 
 .footer-title {
@@ -1329,22 +1381,13 @@ html[dir="rtl"] .language-dropdown-option.is-selected {
   }
 
   .brand-mark {
-    width: 58px;
-    height: 58px;
+    width: 92px;
+    height: 92px;
   }
 
   .brand-footer .brand-mark {
-    width: 78px;
-    height: 78px;
-  }
-
-  .logo-word {
-    font-size: 18px;
-  }
-
-  .logo-sub {
-    font-size: 6px;
-    letter-spacing: 2.4px;
+    width: 108px;
+    height: 108px;
   }
 
   .nav-toggle {
@@ -1471,6 +1514,14 @@ html[dir="rtl"] .language-dropdown-option.is-selected {
   .contact-grid,
   .footer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .social-links {
+    flex-direction: column;
+  }
+
+  .social-link {
+    width: 100%;
   }
 
   .project-grid {

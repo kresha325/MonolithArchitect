@@ -209,6 +209,11 @@ const translations = {
         "Monolith Architects works across private homes, interiors, hospitality, and commercial environments, always balancing atmosphere with function.",
         "Our approach is grounded in material honesty, spatial clarity, and careful coordination through every project phase.",
       ],
+      socialLabel: "For more",
+      socialLinks: {
+        instagram: "Instagram",
+        facebook: "Facebook",
+      },
       yearsOfPractice: "Years of Practice",
       imageAlt: "Monolith Architects courtyard project",
     },
@@ -407,6 +412,11 @@ const translations = {
         "Monolith Architects intervient sur des maisons privées, des intérieurs, des projets hôteliers et des environnements commerciaux, en équilibrant toujours atmosphère et fonction.",
         "Notre approche repose sur l'honnêteté des matériaux, la clarté spatiale et une coordination attentive à chaque phase du projet.",
       ],
+      socialLabel: "Pour en voir plus",
+      socialLinks: {
+        instagram: "Instagram",
+        facebook: "Facebook",
+      },
       yearsOfPractice: "Années d'expérience",
       imageAlt: "Projet de cour Monolith Architects",
     },
@@ -605,6 +615,11 @@ const translations = {
         "Monolith Architects arbeitet an privaten Häusern, Innenräumen, Hospitality-Projekten und gewerblichen Umgebungen und balanciert dabei stets Atmosphäre und Funktion.",
         "Unser Ansatz basiert auf Materialehrlichkeit, räumlicher Klarheit und sorgfältiger Koordination in jeder Projektphase.",
       ],
+      socialLabel: "Mehr entdecken",
+      socialLinks: {
+        instagram: "Instagram",
+        facebook: "Facebook",
+      },
       yearsOfPractice: "Jahre Erfahrung",
       imageAlt: "Innenhofprojekt von Monolith Architects",
     },
@@ -803,6 +818,11 @@ const translations = {
         "Monolith Architects работает с частными домами, интерьерами, гостиничными и коммерческими пространствами, всегда уравновешивая атмосферу и функцию.",
         "Наш подход основан на честности материалов, пространственной ясности и тщательной координации на каждом этапе проекта.",
       ],
+      socialLabel: "Больше в соцсетях",
+      socialLinks: {
+        instagram: "Instagram",
+        facebook: "Facebook",
+      },
       yearsOfPractice: "Лет практики",
       imageAlt: "Проект внутреннего двора Monolith Architects",
     },
@@ -1000,6 +1020,11 @@ const translations = {
         "تعمل Monolith Architects في المنازل الخاصة والديكورات الداخلية والضيافة والبيئات التجارية، مع موازنة دائمة بين الأجواء والوظيفة.",
         "يعتمد نهجنا على صدق المواد ووضوح الفضاء والتنسيق الدقيق في كل مرحلة من مراحل المشروع.",
       ],
+      socialLabel: "للمزيد",
+      socialLinks: {
+        instagram: "Instagram",
+        facebook: "Facebook",
+      },
       yearsOfPractice: "سنوات الخبرة",
       imageAlt: "مشروع فناء من Monolith Architects",
     },
@@ -1183,6 +1208,11 @@ const translations = {
         "Monolith Architects 涵盖私人住宅、室内、酒店和商业环境设计，始终在氛围与功能之间取得平衡。",
         "我们的方式建立在材料真实、空间清晰以及项目各阶段的细致协作之上。",
       ],
+      socialLabel: "了解更多",
+      socialLinks: {
+        instagram: "Instagram",
+        facebook: "Facebook",
+      },
       yearsOfPractice: "从业年限",
       imageAlt: "Monolith Architects 庭院项目",
     },
@@ -1236,7 +1266,13 @@ function getPreferredLanguage() {
 }
 
 function buildLocalizedHref(href, language) {
-  if (!href || href.startsWith("mailto:") || href.startsWith("tel:") || href.startsWith("#")) {
+  if (
+    !href
+    || href.startsWith("mailto:")
+    || href.startsWith("tel:")
+    || href.startsWith("#")
+    || /^(?:[a-z]+:)?\/\//i.test(href)
+  ) {
     return href;
   }
 
@@ -1741,6 +1777,13 @@ function applyAboutPage(copy) {
     setText(aboutCopy.querySelector("h2"), copy.aboutPage.sectionHeading);
     const paragraphs = aboutCopy.querySelectorAll(':scope > p:not(.eyebrow)');
     setNodeTextList(paragraphs, copy.aboutPage.paragraphs);
+    setText(aboutCopy.querySelector(".about-socials-title"), copy.aboutPage.socialLabel);
+    aboutCopy.querySelectorAll(".social-link").forEach((link) => {
+      const socialKey = link.dataset.social;
+      if (socialKey && copy.aboutPage.socialLinks?.[socialKey]) {
+        link.textContent = copy.aboutPage.socialLinks[socialKey];
+      }
+    });
   }
 
   setText(document.querySelector(".glass-card p"), copy.aboutPage.yearsOfPractice);

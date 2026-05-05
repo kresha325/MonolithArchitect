@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 260" role="img" aria-labelledby="title desc">
+  <title id="title">Monolith Architects logo</title>
+  <desc id="desc">Gold architectural monogram above the Monolith Architects wordmark.</desc>
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b89055" />
+      <stop offset="52%" stop-color="#f1d7a1" />
+      <stop offset="100%" stop-color="#98703f" />
+    </linearGradient>
+    <linearGradient id="goldSoft" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#a47842" />
+      <stop offset="50%" stop-color="#f0d39b" />
+      <stop offset="100%" stop-color="#af844a" />
+    </linearGradient>
+  </defs>
+  <g fill="url(#gold)">
+    <path d="M270 96V34l22 18v88h-22Z" />
+    <path d="M248 116V62l22-18v72h-22Z" />
+    <path d="M292 34l26 20v118l-26 16V34Z" />
+    <path d="M318 54l22 18v84h-22V54Z" />
+    <path d="M340 82l22 18v56h-22V82Z" />
+    <path d="M291 34h2v154h-2Z" fill="#17120d" opacity="0.78" />
+    <path d="M232 162h72l-18 7h-72Z" fill="url(#goldSoft)" />
+    <path d="M336 162h72l18 7h-72Z" fill="url(#goldSoft)" />
+    <path d="M210 169h220v2H210Z" fill="url(#goldSoft)" opacity="0.95" />
+  </g>
+  <text
+    x="320"
+    y="214"
+    text-anchor="middle"
+    fill="url(#goldSoft)"
+    font-family="Cormorant Garamond, Times New Roman, serif"
+    font-size="58"
+    letter-spacing="1.8"
+  >
+    MONOLITH
+  </text>
+  <text
+    x="320"
+    y="246"
+    text-anchor="middle"
+    fill="url(#goldSoft)"
+    font-family="Sora, Arial, sans-serif"
+    font-size="18"
+    letter-spacing="10"
+  >
+    ARCHITECTS
+  </text>
+</svg>
