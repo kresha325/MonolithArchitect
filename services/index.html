@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About | Monolith Architects</title>
+    <title>Services | Monolith Architects</title>
     <meta
       name="description"
-      content="Learn more about Monolith Architects, a Tirana-based architecture and interior design studio."
+      content="Architecture, interior design, planning, and project management by Monolith Architects."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,17 +14,13 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Sora:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="../styles.css" />
   </head>
-  <body data-page="about">
-    <header class="page-hero page-hero-about">
+  <body data-page="services">
+    <header class="page-hero page-hero-services">
       <nav class="nav shell">
-        <a
-          class="brand"
-          href="./index.html"
-          aria-label="Monolith Architects home"
-        >
-          <span class="brand-mark" aria-hidden="true"
+        <a class="brand" href="../" aria-label="Monolith Architects home"
+          ><span class="brand-mark" aria-hidden="true"
             ><svg viewBox="0 0 180 180" role="img">
               <circle cx="90" cy="90" r="86" class="logo-disc" />
               <g class="logo-monogram">
@@ -40,11 +36,10 @@
                 ARCHITECTS
               </text>
             </svg></span
-          >
-          <span class="brand-copy"
+          ><span class="brand-copy"
             ><strong>Monolith</strong><span>Architects</span></span
-          >
-        </a>
+          ></a
+        >
         <div class="nav-controls">
           <label class="lang-switch" for="languageSelect">
             <span class="sr-only">Select language</span>
@@ -61,7 +56,6 @@
               <option value="zh">中文</option>
             </select>
           </label>
-
           <button
             class="nav-toggle"
             type="button"
@@ -72,48 +66,88 @@
           </button>
         </div>
         <div class="nav-links">
-          <a href="./index.html">Home</a><a href="./projects.html">Projects</a
-          ><a href="./about.html">About</a><a href="./services.html">Services</a
-          ><a href="./contact.html">Contact</a>
+          <a href="../">Home</a><a href="../projects/">Projects</a
+          ><a href="../about/">About</a><a href="../services/">Services</a
+          ><a href="../contact/">Contact</a>
         </div>
       </nav>
       <div class="page-hero-media"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content shell">
-        <p class="eyebrow">About Us</p>
-        <h1>Architecture is about creating experiences.</h1>
+        <p class="eyebrow">Services</p>
+        <h1>Integrated support from concept to completion.</h1>
         <p class="hero-text">
-          We are a multidisciplinary practice based in Tirana, shaping calm,
-          bold, and highly livable spaces.
+          We deliver architecture, interiors, planning, and project oversight
+          with a consistent design standard throughout.
         </p>
       </div>
     </header>
     <main>
-      <section class="section about">
-        <div class="shell about-grid">
-          <div class="about-copy">
-            <p class="eyebrow">Studio Profile</p>
-            <h2>Contemporary design with precision and restraint.</h2>
+      <section class="section shell">
+        <div class="services-grid services-grid-page">
+          <article class="service-card">
+            <span class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" role="img">
+                <path d="M8 34 24 12l16 22" />
+                <path d="M13 31v7h22v-7" />
+                <path d="M21 38v-8h6v8" />
+                <path d="M18 23h12" />
+              </svg>
+            </span>
+            <h3>Architecture</h3>
             <p>
-              Monolith Architects works across private homes, interiors,
-              hospitality, and commercial environments, always balancing
-              atmosphere with function.
+              Concept design, schematic planning, technical development, and
+              design direction for premium private and commercial projects.
             </p>
+          </article>
+          <article class="service-card">
+            <span class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" role="img">
+                <path d="M13 35h22" />
+                <path d="M17 35V22" />
+                <path d="M31 35V18" />
+                <path d="M17 22c0-4 3-7 7-7h0c4 0 7 3 7 7" />
+                <path d="M20 24h8" />
+              </svg>
+            </span>
+            <h3>Interior Design</h3>
             <p>
-              Our approach is grounded in material honesty, spatial clarity, and
-              careful coordination through every project phase.
+              Spatial planning, material palettes, bespoke detailing, and
+              furnishing concepts that elevate daily living.
             </p>
-          </div>
-          <div class="about-visual">
-            <div class="about-card glass-card">
-              <p>Years of Practice</p>
-              <strong>12+</strong>
-            </div>
-            <img
-              src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80"
-              alt="Monolith Architects courtyard project"
-            />
-          </div>
+          </article>
+          <article class="service-card">
+            <span class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" role="img">
+                <path d="M10 14h28v20H10z" />
+                <path d="M17 10v8M31 10v8M17 30v8M31 30v8" />
+                <path d="M17 24h14" />
+                <path d="M24 17v14" />
+                <path d="M10 20h28" />
+              </svg>
+            </span>
+            <h3>Planning</h3>
+            <p>
+              Site strategy, program organization, circulation logic, and
+              future-ready planning decisions from the outset.
+            </p>
+          </article>
+          <article class="service-card">
+            <span class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" role="img">
+                <path d="M16 10h14l6 6v22H12V10h4" />
+                <path d="M30 10v8h8" />
+                <path d="M18 23h12" />
+                <path d="M18 29h12" />
+                <path d="M18 17h7" />
+              </svg>
+            </span>
+            <h3>Project Management</h3>
+            <p>
+              Coordination, consultant communication, timeline control, and
+              design supervision through implementation.
+            </p>
+          </article>
         </div>
       </section>
     </main>
@@ -122,7 +156,7 @@
         <div>
           <a
             class="brand brand-footer"
-            href="./index.html"
+            href="../"
             aria-label="Monolith Architects home"
             ><span class="brand-mark" aria-hidden="true"
               ><svg viewBox="0 0 180 180" role="img">
@@ -148,9 +182,9 @@
         </div>
         <div>
           <p class="footer-title">Menu</p>
-          <a href="./index.html">Home</a><a href="./projects.html">Projects</a
-          ><a href="./about.html">About</a><a href="./services.html">Services</a
-          ><a href="./contact.html">Contact</a>
+          <a href="../">Home</a><a href="../projects/">Projects</a
+          ><a href="../about/">About</a><a href="../services/">Services</a
+          ><a href="../contact/">Contact</a>
         </div>
         <div>
           <p class="footer-title">Contact</p>
@@ -167,6 +201,6 @@
         </div>
       </div>
     </footer>
-    <script src="./script.js"></script>
+    <script src="../script.js"></script>
   </body>
 </html>

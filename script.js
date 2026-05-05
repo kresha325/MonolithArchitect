@@ -1240,20 +1240,18 @@ function buildLocalizedHref(href, language) {
     return href;
   }
 
-  const localizedUrl = new URL(href, window.location.href);
-
-  if (!localizedUrl.pathname.endsWith(".html")) {
-    return href;
-  }
+  const [pathAndQuery, hash = ""] = href.split("#");
+  const [basePath, rawQuery = ""] = pathAndQuery.split("?");
+  const params = new URLSearchParams(rawQuery);
 
   if (language === "en") {
-    localizedUrl.searchParams.delete("lang");
+    params.delete("lang");
   } else {
-    localizedUrl.searchParams.set("lang", language);
+    params.set("lang", language);
   }
 
-  const relativePath = `${localizedUrl.pathname.split("/").pop() || ""}${localizedUrl.search}${localizedUrl.hash}`;
-  return href.startsWith("./") ? `./${relativePath}` : relativePath;
+  const query = params.toString();
+  return `${basePath}${query ? `?${query}` : ""}${hash ? `#${hash}` : ""}`;
 }
 
 function syncLanguageInUrl(language) {
@@ -1639,7 +1637,7 @@ function applyCommon(copy) {
   syncLanguageInUrl(currentLanguage);
   updateLanguageAwareLinks(currentLanguage);
 
-  document.querySelectorAll('.brand[href="./index.html"]').forEach((brandLink) => {
+  document.querySelectorAll(".brand").forEach((brandLink) => {
     setAttr(brandLink, "aria-label", copy.homeAria);
   });
 

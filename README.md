@@ -19,13 +19,13 @@ Static multipage portfolio website for Monolith Architects.
 - Formspree contact form integration
 - Custom language dropdown
 
-## Files
+## Structure
 
 - `index.html` - homepage
-- `projects.html` - projects page
-- `about.html` - about page
-- `services.html` - services page
-- `contact.html` - contact page
+- `projects/index.html` - projects page
+- `about/index.html` - about page
+- `services/index.html` - services page
+- `contact/index.html` - contact page
 - `styles.css` - shared styles
 - `script.js` - localization, navigation, form logic, and interactions
 
