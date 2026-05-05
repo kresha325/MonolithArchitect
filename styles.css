@@ -1427,10 +1427,12 @@ html[dir="rtl"] .language-dropdown-option.is-selected {
   .hero-content {
     grid-template-columns: 1fr;
     align-items: start;
-    row-gap: 12px;
+    justify-items: center;
+    row-gap: 22px;
     min-height: 0;
     max-width: 100%;
     padding: 86px 0 92px;
+    text-align: center;
   }
 
   .hero-eyebrow {
@@ -1452,11 +1454,20 @@ html[dir="rtl"] .language-dropdown-option.is-selected {
   .page-hero-content {
     min-height: calc(48svh - 84px);
     padding: 108px 0 60px;
+    max-width: none;
+    justify-items: center;
+    text-align: center;
   }
 
   .page-hero-contact .page-hero-content {
     min-height: calc(38svh - 84px);
     padding: 96px 0 38px;
+  }
+
+  .page-hero .hero-eyebrow,
+  .page-hero h1,
+  .page-hero .hero-text {
+    margin-inline: auto;
   }
 
   .page-hero-contact h1 {
@@ -1465,7 +1476,11 @@ html[dir="rtl"] .language-dropdown-option.is-selected {
   }
 
   .page-hero-contact .hero-text {
-    max-width: 22ch;
+    max-width: 24ch;
+  }
+
+  .page-hero .hero-text {
+    margin-top: 14px;
   }
 
   .hero h1 {
@@ -1475,19 +1490,22 @@ html[dir="rtl"] .language-dropdown-option.is-selected {
   }
 
   .hero-text {
-    max-width: 24ch;
+    max-width: 26ch;
     font-size: 0.88rem;
     line-height: 1.58;
-    margin-top: 4px;
+    margin-top: 14px;
   }
 
   .hero-side {
+    display: grid;
+    justify-items: center;
     align-self: start;
+    row-gap: 10px;
     padding-bottom: 0;
   }
 
   .hero-actions {
-    margin-top: 14px;
+    margin-top: 12px;
   }
 
   .hero-link {

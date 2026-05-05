@@ -13,14 +13,25 @@ let languageDropdownHideTimer = null;
 const localizedLanguageNames = {
   en: {
     en: "English",
+    sq: "Albanian",
     fr: "French",
     de: "German",
     ru: "Russian",
     ar: "Arabic",
     zh: "Chinese",
   },
+  sq: {
+    en: "Anglisht",
+    sq: "Shqip",
+    fr: "Frengjisht",
+    de: "Gjermanisht",
+    ru: "Rusisht",
+    ar: "Arabisht",
+    zh: "Kinezisht",
+  },
   fr: {
     en: "Anglais",
+    sq: "Albanais",
     fr: "Français",
     de: "Allemand",
     ru: "Russe",
@@ -29,6 +40,7 @@ const localizedLanguageNames = {
   },
   de: {
     en: "Englisch",
+    sq: "Albanisch",
     fr: "Französisch",
     de: "Deutsch",
     ru: "Russisch",
@@ -37,6 +49,7 @@ const localizedLanguageNames = {
   },
   ru: {
     en: "Английский",
+    sq: "Албанский",
     fr: "Французский",
     de: "Немецкий",
     ru: "Русский",
@@ -45,6 +58,7 @@ const localizedLanguageNames = {
   },
   ar: {
     en: "الإنجليزية",
+    sq: "الألبانية",
     fr: "الفرنسية",
     de: "الألمانية",
     ru: "الروسية",
@@ -53,6 +67,7 @@ const localizedLanguageNames = {
   },
   zh: {
     en: "英语",
+    sq: "阿尔巴尼亚语",
     fr: "法语",
     de: "德语",
     ru: "俄语",
@@ -262,6 +277,205 @@ const translations = {
         "We work across residential, interior, and commercial commissions.",
       sectionText:
         "For new inquiries, collaborations, or consultations, use the form or contact us directly.",
+    },
+  },
+  sq: {
+    languageLabel: "Zgjidh gjuhen",
+    openMenu: "Hap menune",
+    homeAria: "Ballina e Monolith Architects",
+    nav: ["Kreu", "Projektet", "Rreth Nesh", "Sherbimet", "Kontakt"],
+    footer: {
+      tagline: "Krijojme hapesira te vecanta, me qetesi, karakter dhe elegance qe zgjat.",
+      menu: "Menu",
+      contact: "Kontakt",
+      location: "Tirane, Shqiperi",
+      featuredResidenceAlt: "Rezidence e perzgjedhur nga Monolith Architects",
+    },
+    form: {
+      kicker: "Formular Kerkese",
+      heading: "Na tregoni per projektin tuaj",
+      labels: ["Emri", "Email", "Lloji i Projektit", "Afati", "Mesazhi"],
+      placeholders: {
+        name: "Emri juaj i plote",
+        email: "emaili@juaj.com",
+        project: "Rezidencial, komercial, interier...",
+        timeline: "Afati ose data e preferuar",
+        message: "Na tregoni per vizionin, buxhetin dhe afatin e projektit",
+      },
+      detailLabels: {
+        email: "Email",
+        phone: "Telefoni",
+        studio: "Studio",
+      },
+      studioAddress: "Rr. e Kavajes, Tirane, Shqiperi",
+      submit: "Dergo kerkesen",
+      defaultNote: "Dergoni kerkesen tuaj dhe ajo do te vije direkt ne inbox-in tone.",
+      sending: "Duke derguar...",
+      success: "Faleminderit. Kerkesa juaj u dergua me sukses.",
+      failure: "Dergimi nuk u realizua. Ju lutem provoni serish ose na shkruani ne monolitharchitects6@gmail.com.",
+      subject: "Kerkese e re per Monolith Architects",
+    },
+    projects: [
+      {
+        title: "Strehe Moderne",
+        category: "Rezidencial",
+        alt: "Pamje e jashtme e nje vile bashkekohore",
+      },
+      {
+        title: "Apartament Urban",
+        category: "Interier",
+        alt: "Dhome ndenjeje minimaliste me tone te ngrohta",
+      },
+      {
+        title: "Shtepi Minimaliste",
+        category: "Rezidencial",
+        alt: "Hyrje arkitekturore minimaliste",
+      },
+      {
+        title: "Ndertese Zyrash",
+        category: "Komercial",
+        alt: "Fasade xhami e nje godine zyrash",
+      },
+      {
+        title: "Kuzhine Moderne",
+        category: "Interier",
+        alt: "Interier kuzhine bashkekohore",
+      },
+      {
+        title: "Vile ne Kodrine",
+        category: "Rezidencial",
+        alt: "Dhome gjumi e ngrohte me drite natyrale",
+      },
+    ],
+    home: {
+      title: "Monolith Architects",
+      description:
+        "Monolith Architects eshte nje studio arkitekture qe krijon hapesira rezidenciale dhe komerciale me identitet te rafinuar.",
+      heroEyebrow: "Studio Arkitekture me Baze ne Tirane",
+      heroTitle: "<span>Ne projektojme</span><span>hapesira qe</span><span><em>inspirojne</em>.</span>",
+      heroText:
+        "Monolith Architects sjell projekte rezidenciale, hospitality dhe komerciale me fokus te atmosfera, proporcioni dhe qartesia materiale.",
+      heroLink: "Shih projektet tona",
+      selectedProjects: "Projektet e Zgjedhura",
+      projectsHeading:
+        "<span>Nje perzgjedhje nga</span><span>projektet tona me te fundit.</span>",
+      discussProject: "Diskuto projektin tuaj",
+      aboutEyebrow: "Rreth Nesh",
+      aboutHeading: "Arkitektura ka te beje me <em>krijimin e eksperiencave</em>.",
+      aboutParagraphs: [
+        "Jemi nje studio multidisiplinare qe formeson ambiente te guximshme dhe te jetueshme permes arkitektures bashkekohore, dizajnit te interierit dhe planifikimit strategjik.",
+        "Cdo projekt balancon ekspresivitetin me permbajtjen, duke bashkuar materiale te zgjedhura me nje funksion te qarte.",
+      ],
+      aboutButton: "Me shume per ne",
+      yearsOfPractice: "Vite eksperience",
+      aboutImageAlt: "Oborr arkitekturor i rafinuar",
+      servicesEyebrow: "Sherbimet Tona",
+      servicesHeading: "Precision ne cdo faze.",
+      services: [
+        {
+          title: "Arkitekture",
+          description:
+            "Nga koncepti deri ne realizim, krijojme struktura qe bashkojne estetiken me performancen.",
+        },
+        {
+          title: "Dizajn Interieri",
+          description:
+            "Formesojme interiere me ngrohtesi materiale, kompozim te qarte dhe rehati te perditshem.",
+        },
+        {
+          title: "Planifikim",
+          description:
+            "Planifikim i kujdesshem per hapesira efikase, te qendrueshme dhe te pergatitura per te ardhmen.",
+        },
+        {
+          title: "Menaxhim Projekti",
+          description:
+            "Menaxhojme koordinimin dhe realizimin me qartesi, nga skica e pare deri te dorezimi final.",
+        },
+      ],
+      contactEyebrow: "Kontakt",
+      contactHeading: "Le te formesojme hapesiren tuaj te ardhshme.",
+      contactText:
+        "Ndani qellimet e projektit dhe afatin e preferuar. Ne do t'ju kontaktojme per te organizuar nje konsultim fillestar.",
+    },
+    projectsPage: {
+      title: "Projektet | Monolith Architects",
+      description:
+        "Projekte te perzgjedhura rezidenciale, komerciale dhe interieri nga Monolith Architects.",
+      heroEyebrow: "Projektet e Zgjedhura",
+      heroHeading: "Hapesira te krijuara me precision dhe atmosfere.",
+      heroText:
+        "Nje perzgjedhje e kuruar e projekteve rezidenciale, komerciale dhe te interierit, te formesuara nga qartesia, proporcioni dhe thellesia materiale.",
+      portfolioEyebrow: "Portofol",
+      portfolioHeading:
+        "<span>Projektet tona me te fundit</span><span>ne arkitekture dhe interier.</span>",
+      portfolioLink: "Nisni projektin tuaj",
+    },
+    aboutPage: {
+      title: "Rreth Nesh | Monolith Architects",
+      description:
+        "Mesoni me shume per Monolith Architects, studio arkitekture dhe dizajni interieri me baze ne Tirane.",
+      heroEyebrow: "Rreth Nesh",
+      heroHeading: "Arkitektura ka te beje me krijimin e eksperiencave.",
+      heroText:
+        "Jemi nje studio multidisiplinare me baze ne Tirane, qe formeson hapesira te qeta, te guximshme dhe teper te jetueshme.",
+      sectionEyebrow: "Profili i Studios",
+      sectionHeading: "Dizajn bashkekohor me precision dhe permbajtje.",
+      paragraphs: [
+        "Monolith Architects punon ne shtepi private, interiere, projekte hospitality dhe mjedise komerciale, duke balancuar gjithmone atmosferen me funksionin.",
+        "Qasja jone mbeshtetet ne ndershmerine e materialeve, qartesine hapesinore dhe koordinimin e kujdesshem ne cdo faze te projektit.",
+      ],
+      socialLabel: "Na gjeni edhe ne",
+      socialLinks: {
+        instagram: "Instagram",
+        facebook: "Facebook",
+      },
+      yearsOfPractice: "Vite eksperience",
+      imageAlt: "Projekt oborri nga Monolith Architects",
+    },
+    servicesPage: {
+      title: "Sherbimet | Monolith Architects",
+      description:
+        "Arkitekture, dizajn interieri, planifikim dhe menaxhim projektesh nga Monolith Architects.",
+      heroEyebrow: "Sherbimet",
+      heroHeading: "Mbeshtetje e integruar nga koncepti deri ne perfundim.",
+      heroText:
+        "Ofrojme arkitekture, interiere, planifikim dhe mbikeqyrje projekti me nje standard te qendrueshem dizajni ne cdo hap.",
+      services: [
+        {
+          title: "Arkitekture",
+          description:
+            "Projektim konceptual, skema planifikimi, zhvillim teknik dhe drejtim dizajni per projekte private dhe komerciale te nivelit te larte.",
+        },
+        {
+          title: "Dizajn Interieri",
+          description:
+            "Planifikim hapesinor, paleta materialesh, detaje te personalizuara dhe koncepte mobilimi qe e lartesojne perditshmerine.",
+        },
+        {
+          title: "Planifikim",
+          description:
+            "Strategji site-i, organizim programi, logjike qarkullimi dhe vendime planifikimi te orientuara nga e ardhmja qe ne fillim.",
+        },
+        {
+          title: "Menaxhim Projekti",
+          description:
+            "Koordinim, komunikim me konsulentet, kontroll afatesh dhe mbikeqyrje dizajni gjate zbatimit.",
+        },
+      ],
+    },
+    contactPage: {
+      title: "Kontakt | Monolith Architects",
+      description:
+        "Kontaktoni Monolith Architects per kerkesa rezidenciale, komerciale dhe te dizajnit te interierit.",
+      heroEyebrow: "Kontakt",
+      heroHeading: "<span>Le te flasim per</span><span>hapesiren tuaj</span><span>te radhes.</span>",
+      heroText:
+        "Ndani vizionin, afatin dhe llojin e projektit. Ne do t'ju pergjigjemi per te organizuar nje konsultim fillestar.",
+      sectionEyebrow: "Kontakti i Studios",
+      sectionHeading: "Punojme ne projekte rezidenciale, interieri dhe komerciale.",
+      sectionText:
+        "Per kerkesa te reja, bashkepunime ose konsulence, perdorni formularin ose na kontaktoni direkt.",
     },
   },
   fr: {
@@ -1684,11 +1898,12 @@ function applyCommon(copy) {
   const languageLabel = document.querySelector(".sr-only");
   setText(languageLabel, copy.languageLabel);
   setAttr(languageSelect, "aria-label", copy.languageLabel);
-  applyLanguageOptionLabels(currentLanguage);
 
   if (languageSelect instanceof HTMLSelectElement) {
     languageSelect.value = currentLanguage;
   }
+
+  applyLanguageOptionLabels(currentLanguage);
 
   setNodeTextList(document.querySelectorAll(".nav-links a"), copy.nav);
   applyFooter(copy);
