@@ -106,3 +106,12 @@ collections:
                   label: Image
                   name: image
                   widget: image
+              - label: YouTube Videos
+                name: videos
+                widget: list
+                required: false
+                hint: "Optional. Add one or more YouTube URLs. The first valid video will be shown for the project."
+                field:
+                  label: YouTube Video URL
+                  name: video
+                  widget: string

@@ -1887,6 +1887,98 @@ function normalizeLocalizedField(value, fallbackValue = "") {
   return Object.fromEntries(projectTranslationLanguages.map((language) => [language, fallback]));
 }
 
+function normalizeProjectVideoUrl(videoUrl) {
+  return typeof videoUrl === "string" ? videoUrl.trim() : "";
+}
+
+function normalizeProjectVideos(videos, fallbackVideoUrl = "") {
+  const normalizedVideos = Array.isArray(videos)
+    ? videos
+      .map((item) => {
+        if (typeof item === "string") {
+          return item.trim();
+        }
+
+        if (item && typeof item === "object") {
+          return String(item.video ?? "").trim();
+        }
+
+        return "";
+      })
+      .filter(Boolean)
+    : [];
+
+  const normalizedFallbackVideo = normalizeProjectVideoUrl(fallbackVideoUrl);
+
+  if (normalizedFallbackVideo && !normalizedVideos.includes(normalizedFallbackVideo)) {
+    normalizedVideos.unshift(normalizedFallbackVideo);
+  }
+
+  return normalizedVideos;
+}
+
+function getYouTubeEmbedUrl(videoUrl) {
+  const sourceUrl = normalizeProjectVideoUrl(videoUrl);
+
+  if (!sourceUrl) {
+    return "";
+  }
+
+  try {
+    const parsedUrl = new URL(sourceUrl);
+    const hostname = parsedUrl.hostname.replace(/^www\./, "");
+
+    if (hostname === "youtu.be") {
+      const videoId = parsedUrl.pathname.split("/").filter(Boolean)[0] || "";
+      return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
+    }
+
+    if (hostname === "youtube.com" || hostname === "m.youtube.com") {
+      if (parsedUrl.pathname === "/watch") {
+        const videoId = parsedUrl.searchParams.get("v") || "";
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
+      }
+
+      if (parsedUrl.pathname.startsWith("/embed/")) {
+        const videoId = parsedUrl.pathname.split("/embed/")[1]?.split("/")[0] || "";
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
+      }
+
+      if (parsedUrl.pathname.startsWith("/shorts/")) {
+        const videoId = parsedUrl.pathname.split("/shorts/")[1]?.split("/")[0] || "";
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
+      }
+    }
+  } catch {
+    return "";
+  }
+
+  return "";
+}
+
+function getProjectMediaItems(project, options = {}) {
+  const mediaItems = project.images.map((imageSource, index) => ({
+    type: "image",
+    src: imageSource,
+    alt: `${getLocalizedProjectValue(project.alt)} ${index > 0 ? index + 1 : ""}`.trim(),
+  }));
+
+  if (options.includeVideos === false) {
+    return mediaItems;
+  }
+
+  const videoItems = (project.videos || [])
+    .map((videoUrl) => getYouTubeEmbedUrl(videoUrl))
+    .filter(Boolean)
+    .map((embedUrl) => ({
+      type: "video",
+      src: embedUrl,
+      title: `${getLocalizedProjectValue(project.title)} video`,
+    }));
+
+  return [...mediaItems, ...videoItems];
+}
+
 function getLocalizedProjectValue(value, language = currentLanguage) {
   const normalizedValue = normalizeLocalizedField(value);
   return normalizedValue[language] || normalizedValue.en || Object.values(normalizedValue).find(Boolean) || "";
@@ -1900,6 +1992,7 @@ function normalizeProject(project, index) {
   const images = normalizeProjectImages(project?.images, project?.image, fallback.image);
   const title = normalizeLocalizedField(project?.title, fallback.title);
   const alt = normalizeLocalizedField(project?.alt, fallback.alt);
+  const videos = normalizeProjectVideos(project?.videos, project?.videoUrl);
 
   return {
     id: slugifyProjectId(project?.id || getLocalizedProjectValue(title, "en") || fallback.title),
@@ -1908,6 +2001,8 @@ function normalizeProject(project, index) {
     image: images[0],
     images,
     alt,
+    videos,
+    videoUrl: videos[0] || "",
     number: String(project?.number || fallback.number),
   };
 }
@@ -2077,6 +2172,7 @@ function buildProjectCardMarkup(project, options = {}) {
   const categoryLabel = escapeHtml(getCategoryLabel(project.categorySlug));
   const projectTitle = escapeHtml(getLocalizedProjectValue(project.title));
   const projectAlt = escapeHtml(getLocalizedProjectValue(project.alt));
+  const mediaItems = getProjectMediaItems(project, { includeVideos: !options.clickable });
   const cardAttributes = [
     `class="project-card${options.clickable ? " project-card-clickable" : ""}"`,
     `data-filter-category="${escapeHtml(categoryLabel)}"`,
@@ -2087,9 +2183,69 @@ function buildProjectCardMarkup(project, options = {}) {
     cardAttributes.push(`data-category-href="${escapeHtml(getCategoryPageHref(project.categorySlug))}"`);
   }
 
+  if (mediaItems.length > 1) {
+    cardAttributes.push('data-active-media-index="0"');
+  }
+
+  const mediaMarkup = mediaItems.length
+    ? mediaItems
+      .map((item, index) => {
+        const isActive = index === 0;
+
+        if (item.type === "video") {
+          return `
+            <div class="project-media project-media-slide${isActive ? " is-active" : ""}" data-media-index="${index}" ${isActive ? "" : "hidden"}>
+              <div class="project-video-wrapper">
+                <iframe
+                  src="${escapeHtml(item.src)}"
+                  title="${escapeHtml(item.title || `${projectTitle} video`)}"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen
+                ></iframe>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="project-media project-media-slide${isActive ? " is-active" : ""}" data-media-index="${index}" ${isActive ? "" : "hidden"}>
+            <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.alt || projectAlt)}" />
+          </div>
+        `;
+      })
+      .join("")
+    : `<div class="project-media project-media-slide is-active" data-media-index="0"><img src="${escapeHtml(project.image)}" alt="${projectAlt}" /></div>`;
+
+  const mediaControlsMarkup = mediaItems.length > 1
+    ? `
+        <div class="project-media-controls">
+          <div class="project-media-dots" aria-label="${projectTitle} media gallery">
+            ${mediaItems
+              .map(
+                (_, index) => `
+                  <button
+                    type="button"
+                    class="project-media-dot${index === 0 ? " is-active" : ""}"
+                    data-media-target="${index}"
+                    aria-label="Show media ${index + 1}"
+                    aria-pressed="${index === 0 ? "true" : "false"}"
+                  ></button>
+                `,
+              )
+              .join("")}
+          </div>
+        </div>
+      `
+    : "";
+
   return `
     <article ${cardAttributes.join(" ")}>
-      <img src="${escapeHtml(project.image)}" alt="${projectAlt}" />
+      <div class="project-media-stack">
+        ${mediaMarkup}
+        ${mediaControlsMarkup}
+      </div>
       <div class="project-copy">
         <div>
           <h3>${projectTitle}</h3>
@@ -3313,6 +3469,57 @@ function initializeHomeProjectCategoryNavigation() {
   });
 }
 
+function setProjectCardActiveMedia(card, nextIndex) {
+  const slides = Array.from(card.querySelectorAll(".project-media-slide"));
+  const dots = Array.from(card.querySelectorAll(".project-media-dot"));
+
+  if (!slides.length) {
+    return;
+  }
+
+  const normalizedIndex = Math.max(0, Math.min(nextIndex, slides.length - 1));
+  card.dataset.activeMediaIndex = String(normalizedIndex);
+
+  slides.forEach((slide, index) => {
+    const isActive = index === normalizedIndex;
+    slide.classList.toggle("is-active", isActive);
+    slide.hidden = !isActive;
+  });
+
+  dots.forEach((dot, index) => {
+    const isActive = index === normalizedIndex;
+    dot.classList.toggle("is-active", isActive);
+    dot.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function initializeProjectMediaControls() {
+  if (document.body.dataset.projectMediaBound === "true") {
+    return;
+  }
+
+  document.body.dataset.projectMediaBound = "true";
+
+  document.addEventListener("click", (event) => {
+    const trigger = event.target instanceof Element
+      ? event.target.closest(".project-media-dot[data-media-target]")
+      : null;
+
+    if (!(trigger instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    const card = trigger.closest(".project-card");
+
+    if (!(card instanceof HTMLElement)) {
+      return;
+    }
+
+    const nextIndex = Number.parseInt(trigger.dataset.mediaTarget || "0", 10);
+    setProjectCardActiveMedia(card, Number.isNaN(nextIndex) ? 0 : nextIndex);
+  });
+}
+
 function getSavedLanguage() {
   const savedLanguage = window.localStorage.getItem(languageStorageKey);
   return savedLanguage && translations[savedLanguage] ? savedLanguage : "en";
@@ -3387,6 +3594,7 @@ window.localStorage.setItem(languageStorageKey, initialLanguage);
 applyTranslations(initialLanguage);
 initializeCategoryFilters();
 initializeHomeProjectCategoryNavigation();
+initializeProjectMediaControls();
 initializeAdminPanel();
 loadProjectsFromRepository().then(() => {
   applyTranslations(currentLanguage);
