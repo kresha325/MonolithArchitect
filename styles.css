@@ -1205,9 +1205,10 @@ body.project-modal-open {
 }
 
 .project-modal-media img {
-  max-width: 100%;
-  max-height: calc(100dvh - 210px);
-  object-fit: contain;
+  height: calc(100dvh - 210px);
+  max-width: none;
+  max-height: none;
+  object-fit: cover;
 }
 
 .project-modal-video-wrapper,
