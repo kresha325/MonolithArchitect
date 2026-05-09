@@ -2239,6 +2239,58 @@ function getProjectViewerCopy() {
   };
 }
 
+function syncProjectModalIndicators(activeIndex) {
+  if (!activeProjectModalState || !(projectModalRoot instanceof HTMLElement)) {
+    return;
+  }
+
+  const dots = Array.from(projectModalRoot.querySelectorAll(".project-modal-dot"));
+  const count = projectModalRoot.querySelector("#projectModalCount");
+  const copy = getProjectViewerCopy();
+
+  Array.from(projectModalRoot.querySelectorAll(".project-modal-media")).forEach((slide, index) => {
+    const isActive = index === activeIndex;
+    slide.classList.toggle("is-active", isActive);
+    slide.hidden = !isActive;
+  });
+
+  dots.forEach((dot, index) => {
+    const isActive = index === activeIndex;
+    dot.classList.toggle("is-active", isActive);
+    dot.setAttribute("aria-pressed", String(isActive));
+  });
+
+  if (count instanceof HTMLElement) {
+    count.textContent = `${activeIndex + 1} ${copy.of} ${activeProjectModalState.mediaItems.length}`;
+  }
+}
+
+function showProjectModalControls() {
+  if (!(projectModalRoot instanceof HTMLElement)) {
+    return;
+  }
+
+  projectModalRoot.classList.remove("project-modal-controls-visible");
+  void projectModalRoot.offsetWidth;
+  projectModalRoot.classList.add("project-modal-controls-visible");
+}
+
+function clearProjectModalControls() {
+  if (projectModalRoot instanceof HTMLElement) {
+    projectModalRoot.classList.remove("project-modal-controls-visible");
+  }
+}
+
+function navigateProjectModal(direction) {
+  if (!activeProjectModalState || !activeProjectModalState.mediaItems.length) {
+    return;
+  }
+
+  const nextIndex = (activeProjectModalState.activeIndex + direction + activeProjectModalState.mediaItems.length)
+    % activeProjectModalState.mediaItems.length;
+  setProjectModalActiveMedia(nextIndex);
+}
+
 function ensureProjectModal() {
   if (projectModalRoot instanceof HTMLElement) {
     return projectModalRoot;
@@ -2278,6 +2330,55 @@ function ensureProjectModal() {
   `;
 
   document.body.append(projectModalRoot);
+  const stage = projectModalRoot.querySelector(".project-modal-stage");
+
+  projectModalRoot.addEventListener("animationend", (event) => {
+    if (event.animationName === "projectModalArrowReveal") {
+      clearProjectModalControls();
+    }
+  });
+
+  projectModalRoot.addEventListener("click", (event) => {
+    const dismissTrigger = event.target instanceof Element
+      ? event.target.closest("[data-modal-dismiss='true']")
+      : null;
+
+    if (dismissTrigger) {
+      event.stopPropagation();
+      closeProjectModal();
+      return;
+    }
+
+    const modalDot = event.target instanceof Element
+      ? event.target.closest(".project-modal-dot[data-modal-dot]")
+      : null;
+
+    if (modalDot instanceof HTMLButtonElement) {
+      event.stopPropagation();
+      const nextIndex = Number.parseInt(modalDot.dataset.modalDot || "0", 10);
+      setProjectModalActiveMedia(Number.isNaN(nextIndex) ? 0 : nextIndex);
+      showProjectModalControls();
+      return;
+    }
+
+    const navButton = event.target instanceof Element
+      ? event.target.closest(".project-modal-arrow[data-modal-nav]")
+      : null;
+
+    if (navButton instanceof HTMLButtonElement) {
+      event.stopPropagation();
+      navigateProjectModal(navButton.dataset.modalNav === "prev" ? -1 : 1);
+      showProjectModalControls();
+    }
+  });
+
+  ["pointermove", "pointerdown", "touchstart", "touchmove"].forEach((eventName) => {
+    stage?.addEventListener(eventName, () => {
+      if (activeProjectModalState) {
+        showProjectModalControls();
+      }
+    }, { passive: true });
+  });
 
   const track = projectModalRoot.querySelector("#projectModalMediaTrack");
   if (track instanceof HTMLElement) {
@@ -2294,24 +2395,7 @@ function ensureProjectModal() {
       }
 
       activeProjectModalState.activeIndex = nextIndex;
-
-      const dots = Array.from(projectModalRoot.querySelectorAll(".project-modal-dot"));
-      const count = projectModalRoot.querySelector("#projectModalCount");
-      const copy = getProjectViewerCopy();
-
-      Array.from(projectModalRoot.querySelectorAll(".project-modal-media")).forEach((slide, index) => {
-        slide.classList.toggle("is-active", index === nextIndex);
-      });
-
-      dots.forEach((dot, index) => {
-        const isActive = index === nextIndex;
-        dot.classList.toggle("is-active", isActive);
-        dot.setAttribute("aria-pressed", String(isActive));
-      });
-
-      if (count instanceof HTMLElement) {
-        count.textContent = `${nextIndex + 1} ${copy.of} ${activeProjectModalState.mediaItems.length}`;
-      }
+      syncProjectModalIndicators(nextIndex);
     }, { passive: true });
   }
 
@@ -2328,38 +2412,14 @@ function setProjectModalActiveMedia(nextIndex, behavior = "smooth") {
   activeProjectModalState.activeIndex = normalizedIndex;
 
   const slides = Array.from(projectModalRoot.querySelectorAll(".project-modal-media"));
-  const dots = Array.from(projectModalRoot.querySelectorAll(".project-modal-dot"));
-  const count = projectModalRoot.querySelector("#projectModalCount");
-  const track = projectModalRoot.querySelector("#projectModalMediaTrack");
-  const copy = getProjectViewerCopy();
-  const isMobileFullscreen = window.matchMedia("(max-width: 720px)").matches;
 
   slides.forEach((slide, index) => {
     const isActive = index === normalizedIndex;
     slide.classList.toggle("is-active", isActive);
-    if (!isMobileFullscreen) {
-      slide.hidden = !isActive;
-    } else {
-      slide.hidden = false;
-    }
+    slide.hidden = !isActive;
   });
 
-  dots.forEach((dot, index) => {
-    const isActive = index === normalizedIndex;
-    dot.classList.toggle("is-active", isActive);
-    dot.setAttribute("aria-pressed", String(isActive));
-  });
-
-  if (count instanceof HTMLElement) {
-    count.textContent = `${normalizedIndex + 1} ${copy.of} ${mediaItems.length}`;
-  }
-
-  if (isMobileFullscreen && track instanceof HTMLElement) {
-    track.scrollTo({
-      left: track.clientWidth * normalizedIndex,
-      behavior,
-    });
-  }
+  syncProjectModalIndicators(normalizedIndex);
 }
 
 function closeProjectModal() {
@@ -2367,6 +2427,7 @@ function closeProjectModal() {
     return;
   }
 
+  clearProjectModalControls();
   projectModalRoot.hidden = true;
   projectModalRoot.setAttribute("aria-hidden", "true");
   document.body.classList.remove("project-modal-open");
@@ -2458,6 +2519,7 @@ function openProjectModal(projectId, startIndex = 0) {
   modal.hidden = false;
   modal.setAttribute("aria-hidden", "false");
   document.body.classList.add("project-modal-open");
+  showProjectModalControls();
   setProjectModalActiveMedia(startIndex, "auto");
 }
 
@@ -3840,37 +3902,6 @@ function initializeProjectModal() {
   ensureProjectModal();
 
   document.addEventListener("click", (event) => {
-    const dismissTrigger = event.target instanceof Element
-      ? event.target.closest("[data-modal-dismiss='true']")
-      : null;
-
-    if (dismissTrigger) {
-      closeProjectModal();
-      return;
-    }
-
-    const modalDot = event.target instanceof Element
-      ? event.target.closest(".project-modal-dot[data-modal-dot]")
-      : null;
-
-    if (modalDot instanceof HTMLButtonElement) {
-      const nextIndex = Number.parseInt(modalDot.dataset.modalDot || "0", 10);
-      setProjectModalActiveMedia(Number.isNaN(nextIndex) ? 0 : nextIndex);
-      return;
-    }
-
-    const navButton = event.target instanceof Element
-      ? event.target.closest(".project-modal-arrow[data-modal-nav]")
-      : null;
-
-    if (navButton instanceof HTMLButtonElement && activeProjectModalState) {
-      const direction = navButton.dataset.modalNav === "prev" ? -1 : 1;
-      const nextIndex = (activeProjectModalState.activeIndex + direction + activeProjectModalState.mediaItems.length)
-        % activeProjectModalState.mediaItems.length;
-      setProjectModalActiveMedia(nextIndex);
-      return;
-    }
-
     const card = event.target instanceof Element
       ? event.target.closest(".project-card[data-project-modal='true']")
       : null;
@@ -3910,13 +3941,13 @@ function initializeProjectModal() {
 
     if (event.key === "ArrowRight") {
       event.preventDefault();
-      setProjectModalActiveMedia((activeProjectModalState.activeIndex + 1) % activeProjectModalState.mediaItems.length);
+      navigateProjectModal(1);
       return;
     }
 
     if (event.key === "ArrowLeft") {
       event.preventDefault();
-      setProjectModalActiveMedia((activeProjectModalState.activeIndex - 1 + activeProjectModalState.mediaItems.length) % activeProjectModalState.mediaItems.length);
+      navigateProjectModal(-1);
     }
   });
 }
