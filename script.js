@@ -1888,7 +1888,22 @@ function normalizeLocalizedField(value, fallbackValue = "") {
 }
 
 function normalizeProjectVideoUrl(videoUrl) {
-  return typeof videoUrl === "string" ? videoUrl.trim() : "";
+  if (typeof videoUrl !== "string") {
+    return "";
+  }
+
+  const normalizedValue = videoUrl.trim();
+
+  if (!normalizedValue) {
+    return "";
+  }
+
+  const iframeSourceMatch = normalizedValue.match(/<iframe[^>]+src=["']([^"']+)["']/i);
+  if (iframeSourceMatch?.[1]) {
+    return iframeSourceMatch[1].trim();
+  }
+
+  return normalizedValue;
 }
 
 function normalizeProjectVideos(videos, fallbackVideoUrl = "") {
@@ -1946,6 +1961,13 @@ function getYouTubeEmbedUrl(videoUrl) {
 
       if (parsedUrl.pathname.startsWith("/shorts/")) {
         const videoId = parsedUrl.pathname.split("/shorts/")[1]?.split("/")[0] || "";
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
+      }
+    }
+
+    if (hostname === "youtube-nocookie.com") {
+      if (parsedUrl.pathname.startsWith("/embed/")) {
+        const videoId = parsedUrl.pathname.split("/embed/")[1]?.split("/")[0] || "";
         return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
       }
     }

@@ -110,7 +110,7 @@ collections:
                 name: videos
                 widget: list
                 required: false
-                hint: "Optional. Add one or more YouTube URLs. The first valid video will be shown for the project."
+                hint: "Optional. Add one or more YouTube URLs or iframe embed codes. The first valid video will be shown for the project."
                 field:
                   label: YouTube Video URL
                   name: video
