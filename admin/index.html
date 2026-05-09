@@ -111,11 +111,25 @@
       Secure admin access requires JavaScript. Use
       https://monolitharchitect.netlify.app/admin/
     </noscript>
+    <div id="nc-root" hidden></div>
     <script>
       const secureAdminUrl = "https://monolitharchitect.netlify.app/admin/";
+      const secureAdminOrigin = new URL(secureAdminUrl).origin;
+      const isHostedAdmin =
+        window.location.origin === secureAdminOrigin &&
+        window.location.pathname.startsWith("/admin");
 
-      if (window.location.href !== secureAdminUrl) {
+      if (!isHostedAdmin && window.location.href !== secureAdminUrl) {
         window.location.replace(secureAdminUrl);
+      }
+
+      if (isHostedAdmin) {
+        document.querySelector("main")?.setAttribute("hidden", "hidden");
+        document.querySelector("#nc-root")?.removeAttribute("hidden");
+
+        const cmsScript = document.createElement("script");
+        cmsScript.src = "https://unpkg.com/decap-cms@^3.5.0/dist/decap-cms.js";
+        document.body.append(cmsScript);
       }
     </script>
   </body>
