@@ -12,12 +12,17 @@
     <style>
       :root {
         color-scheme: light;
-        --bg: #111214;
-        --panel: rgba(255, 255, 255, 0.08);
-        --line: rgba(255, 255, 255, 0.16);
-        --text: #f4efe6;
-        --muted: rgba(244, 239, 230, 0.7);
+        --bg: #121315;
+        --bg-soft: #1a1917;
+        --panel: rgba(255, 248, 238, 0.1);
+        --panel-strong: rgba(18, 19, 21, 0.72);
+        --line: rgba(255, 255, 255, 0.14);
+        --line-strong: rgba(190, 162, 113, 0.34);
+        --text: #f5efe6;
+        --muted: rgba(245, 239, 230, 0.72);
         --accent: #bea271;
+        --accent-strong: #d4b07a;
+        --shadow: 0 32px 80px rgba(5, 6, 8, 0.34);
       }
 
       * {
@@ -29,74 +34,251 @@
         min-height: 100vh;
         display: grid;
         place-items: center;
-        padding: 24px;
+        padding: 28px;
         background:
+          radial-gradient(
+            circle at 14% 16%,
+            rgba(212, 176, 122, 0.2),
+            transparent 24%
+          ),
+          radial-gradient(
+            circle at 82% 12%,
+            rgba(255, 255, 255, 0.08),
+            transparent 20%
+          ),
+          radial-gradient(
+            circle at 70% 72%,
+            rgba(190, 162, 113, 0.1),
+            transparent 28%
+          ),
           radial-gradient(
             circle at top,
             rgba(190, 162, 113, 0.18),
             transparent 32%
           ),
-          linear-gradient(180deg, #171513, #0f1012);
+          linear-gradient(180deg, #1b1713, #101113 44%, #0b0c0d);
         color: var(--text);
         font-family: "Sora", "Segoe UI", sans-serif;
+        overflow-x: hidden;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        inset: auto;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        pointer-events: none;
+        filter: blur(22px);
+        opacity: 0.5;
+      }
+
+      body::before {
+        top: -80px;
+        right: -60px;
+        background: rgba(190, 162, 113, 0.16);
+      }
+
+      body::after {
+        bottom: -120px;
+        left: -70px;
+        background: rgba(255, 255, 255, 0.06);
       }
 
       main {
-        width: min(520px, 100%);
-        padding: 32px;
+        position: relative;
+        z-index: 1;
+        width: min(720px, 100%);
+        padding: 38px;
         border: 1px solid var(--line);
-        background: var(--panel);
-        -webkit-backdrop-filter: blur(16px);
-        backdrop-filter: blur(16px);
+        background:
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.08),
+            rgba(255, 255, 255, 0.03)
+          ),
+          rgba(12, 13, 15, 0.72);
+        box-shadow: var(--shadow);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+        color: var(--accent-strong);
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 38px;
+        height: 1px;
+        background: rgba(212, 176, 122, 0.64);
       }
 
       h1 {
-        margin: 0 0 12px;
-        font-size: clamp(2rem, 7vw, 2.8rem);
-        line-height: 0.95;
+        max-width: 10ch;
+        margin: 0 0 14px;
+        font-size: clamp(2.5rem, 7vw, 4.1rem);
+        font-weight: 600;
+        line-height: 0.9;
+        letter-spacing: -0.04em;
       }
 
       p {
         margin: 0;
         color: var(--muted);
-        line-height: 1.65;
+        line-height: 1.7;
+      }
+
+      .lead {
+        max-width: 56ch;
+        font-size: 1.02rem;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 28px;
+      }
+
+      .feature-card {
+        padding: 18px 18px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .feature-card strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--text);
+        font-size: 0.84rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
       }
 
       .actions {
         display: flex;
         gap: 12px;
         flex-wrap: wrap;
-        margin-top: 24px;
+        margin-top: 28px;
       }
 
       a {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 44px;
-        padding: 12px 16px;
+        min-height: 48px;
+        padding: 12px 18px;
         border: 1px solid var(--accent);
         color: var(--text);
         text-decoration: none;
         text-transform: uppercase;
         letter-spacing: 0.12em;
         font-size: 0.72rem;
+        transition:
+          transform 180ms ease,
+          border-color 180ms ease,
+          background-color 180ms ease,
+          box-shadow 180ms ease;
+      }
+
+      a:hover,
+      a:focus-visible {
+        transform: translateY(-1px);
+        border-color: var(--accent-strong);
+        background: rgba(190, 162, 113, 0.14);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
       }
 
       .secondary {
         border-color: var(--line);
         color: var(--muted);
       }
+
+      .admin-note {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 0.88rem;
+      }
+
+      body[data-admin-mode="hosted"] {
+        display: block;
+        padding: 0;
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(190, 162, 113, 0.18),
+            transparent 18%
+          ),
+          linear-gradient(180deg, #f7f3ee, #f2ede5 48%, #efe8dd);
+        color: #161514;
+      }
+
+      body[data-admin-mode="hosted"]::before,
+      body[data-admin-mode="hosted"]::after,
+      body[data-admin-mode="hosted"] main {
+        display: none;
+      }
+
+      @media (max-width: 720px) {
+        body {
+          padding: 16px;
+        }
+
+        main {
+          padding: 24px;
+        }
+
+        .feature-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .actions {
+          flex-direction: column;
+        }
+
+        a {
+          width: 100%;
+        }
+      }
     </style>
   </head>
   <body>
     <main>
-      <h1>Secure Admin Access</h1>
-      <p>
+      <span class="eyebrow">Monolith Admin Portal</span>
+      <h1>Secure content control with a calmer interface.</h1>
+      <p class="lead">
         Project editing is available only through the Netlify-hosted admin with
         GitHub authentication. This local route is kept as a redirect so the CMS
         is not exposed as a misleading password-free entry point.
       </p>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <strong>Hosted Editing</strong>
+          <p>
+            Use the authenticated admin workspace for project updates, media,
+            and publishing.
+          </p>
+        </article>
+        <article class="feature-card">
+          <strong>Safer Access</strong>
+          <p>
+            This route stays as a guarded handoff instead of looking like a
+            public password-free editor.
+          </p>
+        </article>
+      </div>
       <div class="actions">
         <a
           id="secureAdminLink"
@@ -106,6 +288,10 @@
         </a>
         <a class="secondary" href="../">Back to site</a>
       </div>
+      <p class="admin-note">
+        If the hosted CMS is already open, this page will hand off
+        automatically.
+      </p>
     </main>
     <noscript>
       Secure admin access requires JavaScript. Use
@@ -119,16 +305,147 @@
         window.location.origin === secureAdminOrigin &&
         window.location.pathname.startsWith("/admin");
 
+      document.body.dataset.adminMode = isHostedAdmin ? "hosted" : "gate";
+
+      function injectHostedAdminTheme() {
+        if (document.querySelector("#monolith-admin-theme")) {
+          return;
+        }
+
+        const themeStyle = document.createElement("style");
+        themeStyle.id = "monolith-admin-theme";
+        themeStyle.textContent = `
+          body[data-admin-mode="hosted"] #nc-root {
+            min-height: 100vh;
+            font-family: "Sora", "Segoe UI", sans-serif;
+            color: #161514;
+          }
+
+          body[data-admin-mode="hosted"] #nc-root button,
+          body[data-admin-mode="hosted"] #nc-root [role="button"] {
+            border-radius: 14px !important;
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease !important;
+          }
+
+          body[data-admin-mode="hosted"] #nc-root button:hover,
+          body[data-admin-mode="hosted"] #nc-root [role="button"]:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(17, 18, 20, 0.08) !important;
+          }
+
+          body[data-admin-mode="hosted"] #nc-root input,
+          body[data-admin-mode="hosted"] #nc-root textarea,
+          body[data-admin-mode="hosted"] #nc-root select {
+            border-radius: 14px !important;
+            border-color: rgba(22, 21, 21, 0.14) !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+          }
+
+          body[data-admin-mode="hosted"] #nc-root img {
+            border-radius: 18px !important;
+          }
+
+          body[data-admin-mode="hosted"] #nc-root a {
+            color: #8d6a32 !important;
+          }
+
+          body[data-admin-mode="hosted"] #nc-root ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+          }
+
+          body[data-admin-mode="hosted"] #nc-root ::-webkit-scrollbar-thumb {
+            border: 3px solid transparent;
+            border-radius: 999px;
+            background: rgba(190, 162, 113, 0.42);
+            background-clip: padding-box;
+          }
+        `;
+
+        document.head.append(themeStyle);
+      }
+
+      function normalizeAdminTextContent(element) {
+        return String(element?.textContent || "")
+          .replace(/\s+/g, " ")
+          .trim()
+          .toLowerCase();
+      }
+
+      function applyAdminLayoutFixes() {
+        const adminRoot = document.querySelector("#nc-root");
+
+        if (!(adminRoot instanceof HTMLElement)) {
+          return;
+        }
+
+        adminRoot.querySelectorAll("*").forEach((node) => {
+          if (
+            !(node instanceof HTMLElement) ||
+            node.dataset.monolithStickyFixApplied === "true"
+          ) {
+            return;
+          }
+
+          const computedStyle = window.getComputedStyle(node);
+          if (
+            computedStyle.position !== "sticky" &&
+            computedStyle.position !== "fixed"
+          ) {
+            return;
+          }
+
+          const bounds = node.getBoundingClientRect();
+          if (
+            bounds.height <= 0 ||
+            bounds.height > 180 ||
+            bounds.top < 72 ||
+            bounds.top > 260
+          ) {
+            return;
+          }
+
+          const normalizedText = normalizeAdminTextContent(node);
+          const looksLikeEntryToolbar =
+            normalizedText.includes("contents") ||
+            normalizedText.includes("media") ||
+            normalizedText.includes("add project") ||
+            normalizedText.includes("add projects") ||
+            normalizedText.includes("projects");
+
+          if (!looksLikeEntryToolbar) {
+            return;
+          }
+
+          node.dataset.monolithStickyFixApplied = "true";
+          node.style.position = "static";
+          node.style.top = "0";
+          node.style.zIndex = "1";
+        });
+      }
+
+      function initializeAdminLayoutFixes() {
+        applyAdminLayoutFixes();
+
+        const observer = new MutationObserver(() => {
+          applyAdminLayoutFixes();
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
+
       if (!isHostedAdmin && window.location.href !== secureAdminUrl) {
         window.location.replace(secureAdminUrl);
       }
 
       if (isHostedAdmin) {
+        injectHostedAdminTheme();
         document.querySelector("main")?.setAttribute("hidden", "hidden");
         document.querySelector("#nc-root")?.removeAttribute("hidden");
 
         const cmsScript = document.createElement("script");
         cmsScript.src = "https://unpkg.com/decap-cms@^3.5.0/dist/decap-cms.js";
+        cmsScript.addEventListener("load", initializeAdminLayoutFixes);
         document.body.append(cmsScript);
       }
     </script>
