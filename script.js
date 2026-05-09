@@ -12,6 +12,8 @@ let languageDropdownRoot = null;
 let languageDropdownHideTimer = null;
 let projectCatalogCache = [];
 let projectsDataLoaded = false;
+let projectModalRoot = null;
+let activeProjectModalState = null;
 
 const localizedLanguageNames = {
   en: {
@@ -2205,19 +2207,281 @@ function getProjectEmptyStateText() {
   return currentLanguage === "sq" ? "Nuk ka projekte ende." : "No projects yet.";
 }
 
+function getProjectViewerCopy() {
+  if (currentLanguage === "sq") {
+    return {
+      openGallery: "Hap galerine",
+      galleryHint: "Kliko per ta pare projektin ne ekran te madh",
+      moreMedia: "Ka media te tjera",
+      mediaCount: "media",
+      slideCount: "pamje",
+      previous: "Media e meparshme",
+      next: "Media tjeter",
+      close: "Mbyll galerine",
+      imageLabel: "Imazh",
+      videoLabel: "Video",
+      of: "nga",
+    };
+  }
+
+  return {
+    openGallery: "Open gallery",
+    galleryHint: "Click to view this project in a larger slider",
+    moreMedia: "More media inside",
+    mediaCount: "media",
+    slideCount: "slides",
+    previous: "Previous media",
+    next: "Next media",
+    close: "Close gallery",
+    imageLabel: "Image",
+    videoLabel: "Video",
+    of: "of",
+  };
+}
+
+function ensureProjectModal() {
+  if (projectModalRoot instanceof HTMLElement) {
+    return projectModalRoot;
+  }
+
+  projectModalRoot = document.createElement("div");
+  projectModalRoot.className = "project-modal";
+  projectModalRoot.hidden = true;
+  projectModalRoot.setAttribute("aria-hidden", "true");
+  projectModalRoot.innerHTML = `
+    <div class="project-modal-backdrop" data-modal-dismiss="true"></div>
+    <div class="project-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+      <button type="button" class="project-modal-close" data-modal-dismiss="true" aria-label="Close gallery">
+        <span aria-hidden="true">+</span>
+      </button>
+      <div class="project-modal-meta">
+        <p class="project-modal-kicker" id="projectModalCategory"></p>
+        <div class="project-modal-heading-row">
+          <h3 id="projectModalTitle"></h3>
+          <p class="project-modal-count" id="projectModalCount"></p>
+        </div>
+      </div>
+      <div class="project-modal-stage">
+        <button type="button" class="project-modal-arrow project-modal-arrow-prev" data-modal-nav="prev" aria-label="Previous media">
+          <span aria-hidden="true">&larr;</span>
+        </button>
+        <div class="project-modal-media-track" id="projectModalMediaTrack"></div>
+        <button type="button" class="project-modal-arrow project-modal-arrow-next" data-modal-nav="next" aria-label="Next media">
+          <span aria-hidden="true">&rarr;</span>
+        </button>
+      </div>
+      <div class="project-modal-footer">
+        <p class="project-modal-hint" id="projectModalHint"></p>
+        <div class="project-modal-dots" id="projectModalDots"></div>
+      </div>
+    </div>
+  `;
+
+  document.body.append(projectModalRoot);
+
+  const track = projectModalRoot.querySelector("#projectModalMediaTrack");
+  if (track instanceof HTMLElement) {
+    track.addEventListener("scroll", () => {
+      if (!activeProjectModalState || !window.matchMedia("(max-width: 720px)").matches) {
+        return;
+      }
+
+      const trackWidth = track.clientWidth || 1;
+      const nextIndex = Math.round(track.scrollLeft / trackWidth);
+
+      if (nextIndex === activeProjectModalState.activeIndex) {
+        return;
+      }
+
+      activeProjectModalState.activeIndex = nextIndex;
+
+      const dots = Array.from(projectModalRoot.querySelectorAll(".project-modal-dot"));
+      const count = projectModalRoot.querySelector("#projectModalCount");
+      const copy = getProjectViewerCopy();
+
+      Array.from(projectModalRoot.querySelectorAll(".project-modal-media")).forEach((slide, index) => {
+        slide.classList.toggle("is-active", index === nextIndex);
+      });
+
+      dots.forEach((dot, index) => {
+        const isActive = index === nextIndex;
+        dot.classList.toggle("is-active", isActive);
+        dot.setAttribute("aria-pressed", String(isActive));
+      });
+
+      if (count instanceof HTMLElement) {
+        count.textContent = `${nextIndex + 1} ${copy.of} ${activeProjectModalState.mediaItems.length}`;
+      }
+    }, { passive: true });
+  }
+
+  return projectModalRoot;
+}
+
+function setProjectModalActiveMedia(nextIndex, behavior = "smooth") {
+  if (!activeProjectModalState || !(projectModalRoot instanceof HTMLElement)) {
+    return;
+  }
+
+  const { mediaItems } = activeProjectModalState;
+  const normalizedIndex = Math.max(0, Math.min(nextIndex, mediaItems.length - 1));
+  activeProjectModalState.activeIndex = normalizedIndex;
+
+  const slides = Array.from(projectModalRoot.querySelectorAll(".project-modal-media"));
+  const dots = Array.from(projectModalRoot.querySelectorAll(".project-modal-dot"));
+  const count = projectModalRoot.querySelector("#projectModalCount");
+  const track = projectModalRoot.querySelector("#projectModalMediaTrack");
+  const copy = getProjectViewerCopy();
+  const isMobileFullscreen = window.matchMedia("(max-width: 720px)").matches;
+
+  slides.forEach((slide, index) => {
+    const isActive = index === normalizedIndex;
+    slide.classList.toggle("is-active", isActive);
+    if (!isMobileFullscreen) {
+      slide.hidden = !isActive;
+    } else {
+      slide.hidden = false;
+    }
+  });
+
+  dots.forEach((dot, index) => {
+    const isActive = index === normalizedIndex;
+    dot.classList.toggle("is-active", isActive);
+    dot.setAttribute("aria-pressed", String(isActive));
+  });
+
+  if (count instanceof HTMLElement) {
+    count.textContent = `${normalizedIndex + 1} ${copy.of} ${mediaItems.length}`;
+  }
+
+  if (isMobileFullscreen && track instanceof HTMLElement) {
+    track.scrollTo({
+      left: track.clientWidth * normalizedIndex,
+      behavior,
+    });
+  }
+}
+
+function closeProjectModal() {
+  if (!(projectModalRoot instanceof HTMLElement)) {
+    return;
+  }
+
+  projectModalRoot.hidden = true;
+  projectModalRoot.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("project-modal-open");
+  activeProjectModalState = null;
+}
+
+function openProjectModal(projectId, startIndex = 0) {
+  const modal = ensureProjectModal();
+  const project = getStoredProjects().find((item) => item.id === projectId);
+
+  if (!project) {
+    return;
+  }
+
+  const mediaItems = getProjectMediaItems(project);
+  if (!mediaItems.length) {
+    return;
+  }
+
+  const title = getLocalizedProjectValue(project.title);
+  const category = getCategoryLabel(project.categorySlug);
+  const copy = getProjectViewerCopy();
+  const titleNode = modal.querySelector("#projectModalTitle");
+  const categoryNode = modal.querySelector("#projectModalCategory");
+  const track = modal.querySelector("#projectModalMediaTrack");
+  const dots = modal.querySelector("#projectModalDots");
+  const hint = modal.querySelector("#projectModalHint");
+  const closeButton = modal.querySelector(".project-modal-close");
+  const prevButton = modal.querySelector(".project-modal-arrow-prev");
+  const nextButton = modal.querySelector(".project-modal-arrow-next");
+
+  if (titleNode instanceof HTMLElement) titleNode.textContent = title;
+  if (categoryNode instanceof HTMLElement) categoryNode.textContent = category;
+  if (hint instanceof HTMLElement) {
+    hint.textContent = mediaItems.length > 1 ? copy.moreMedia : copy.galleryHint;
+  }
+  if (closeButton instanceof HTMLButtonElement) closeButton.setAttribute("aria-label", copy.close);
+  if (prevButton instanceof HTMLButtonElement) {
+    prevButton.setAttribute("aria-label", copy.previous);
+    prevButton.hidden = mediaItems.length < 2;
+  }
+  if (nextButton instanceof HTMLButtonElement) {
+    nextButton.setAttribute("aria-label", copy.next);
+    nextButton.hidden = mediaItems.length < 2;
+  }
+
+  if (track instanceof HTMLElement) {
+    track.innerHTML = mediaItems.map((item, index) => {
+      const isActive = index === 0;
+
+      if (item.type === "video") {
+        return `
+          <div class="project-modal-media${isActive ? " is-active" : ""}" data-modal-media-index="${index}" ${isActive ? "" : "hidden"}>
+            <div class="project-modal-video-wrapper">
+              <iframe
+                src="${escapeHtml(item.src)}"
+                title="${escapeHtml(item.title || `${title} video`)}"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="project-modal-media${isActive ? " is-active" : ""}" data-modal-media-index="${index}" ${isActive ? "" : "hidden"}>
+          <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.alt || title)}" />
+        </div>
+      `;
+    }).join("");
+  }
+
+  if (dots instanceof HTMLElement) {
+    dots.innerHTML = mediaItems.map((item, index) => `
+      <button
+        type="button"
+        class="project-modal-dot${index === 0 ? " is-active" : ""}"
+        data-modal-dot="${index}"
+        aria-label="${escapeHtml(`${item.type === "video" ? copy.videoLabel : copy.imageLabel} ${index + 1}`)}"
+        aria-pressed="${index === 0 ? "true" : "false"}"
+      ></button>
+    `).join("");
+  }
+
+  activeProjectModalState = { projectId, mediaItems, activeIndex: 0 };
+  modal.hidden = false;
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("project-modal-open");
+  setProjectModalActiveMedia(startIndex, "auto");
+}
+
 function buildProjectCardMarkup(project, options = {}) {
   const categoryLabel = escapeHtml(getCategoryLabel(project.categorySlug));
   const projectTitle = escapeHtml(getLocalizedProjectValue(project.title));
   const projectAlt = escapeHtml(getLocalizedProjectValue(project.alt));
   const mediaItems = getProjectMediaItems(project, { includeVideos: !options.clickable });
+  const viewerCopy = getProjectViewerCopy();
+  const hasVideo = mediaItems.some((item) => item.type === "video");
   const cardAttributes = [
     `class="project-card${options.clickable ? " project-card-clickable" : ""}"`,
+    `data-project-id="${escapeHtml(project.id)}"`,
     `data-filter-category="${escapeHtml(categoryLabel)}"`,
     `data-category-label="${escapeHtml(categoryLabel)}"`,
   ];
 
   if (options.clickable) {
     cardAttributes.push(`data-category-href="${escapeHtml(getCategoryPageHref(project.categorySlug))}"`);
+  } else {
+    cardAttributes.push('data-project-modal="true"');
+    cardAttributes.push('tabindex="0"');
+    cardAttributes.push('role="button"');
+    cardAttributes.push(`aria-label="${escapeHtml(`${viewerCopy.openGallery}: ${getLocalizedProjectValue(project.title)}`)}"`);
   }
 
   if (mediaItems.length > 1) {
@@ -2277,11 +2541,21 @@ function buildProjectCardMarkup(project, options = {}) {
       `
     : "";
 
+  const viewerCueMarkup = !options.clickable
+    ? `
+        <div class="project-card-viewer-cue">
+          <span>${escapeHtml(viewerCopy.openGallery)}</span>
+          <strong>${escapeHtml(`${mediaItems.length} ${hasVideo ? viewerCopy.mediaCount : viewerCopy.slideCount}`)}</strong>
+        </div>
+      `
+    : "";
+
   return `
     <article ${cardAttributes.join(" ")}>
       <div class="project-media-stack">
         ${mediaMarkup}
         ${mediaControlsMarkup}
+        ${viewerCueMarkup}
       </div>
       <div class="project-copy">
         <div>
@@ -3557,6 +3831,179 @@ function initializeProjectMediaControls() {
   });
 }
 
+function initializeProjectModal() {
+  if (document.body.dataset.projectModalBound === "true") {
+    return;
+  }
+
+  document.body.dataset.projectModalBound = "true";
+  ensureProjectModal();
+
+  document.addEventListener("click", (event) => {
+    const dismissTrigger = event.target instanceof Element
+      ? event.target.closest("[data-modal-dismiss='true']")
+      : null;
+
+    if (dismissTrigger) {
+      closeProjectModal();
+      return;
+    }
+
+    const modalDot = event.target instanceof Element
+      ? event.target.closest(".project-modal-dot[data-modal-dot]")
+      : null;
+
+    if (modalDot instanceof HTMLButtonElement) {
+      const nextIndex = Number.parseInt(modalDot.dataset.modalDot || "0", 10);
+      setProjectModalActiveMedia(Number.isNaN(nextIndex) ? 0 : nextIndex);
+      return;
+    }
+
+    const navButton = event.target instanceof Element
+      ? event.target.closest(".project-modal-arrow[data-modal-nav]")
+      : null;
+
+    if (navButton instanceof HTMLButtonElement && activeProjectModalState) {
+      const direction = navButton.dataset.modalNav === "prev" ? -1 : 1;
+      const nextIndex = (activeProjectModalState.activeIndex + direction + activeProjectModalState.mediaItems.length)
+        % activeProjectModalState.mediaItems.length;
+      setProjectModalActiveMedia(nextIndex);
+      return;
+    }
+
+    const card = event.target instanceof Element
+      ? event.target.closest(".project-card[data-project-modal='true']")
+      : null;
+
+    if (!(card instanceof HTMLElement)) {
+      return;
+    }
+
+    if (event.target instanceof Element && event.target.closest("button, a, iframe")) {
+      return;
+    }
+
+    const activeIndex = Number.parseInt(card.dataset.activeMediaIndex || "0", 10);
+    openProjectModal(card.dataset.projectId || "", Number.isNaN(activeIndex) ? 0 : activeIndex);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const card = event.target instanceof Element
+      ? event.target.closest(".project-card[data-project-modal='true']")
+      : null;
+
+    if (card instanceof HTMLElement && (event.key === "Enter" || event.key === " ")) {
+      event.preventDefault();
+      const activeIndex = Number.parseInt(card.dataset.activeMediaIndex || "0", 10);
+      openProjectModal(card.dataset.projectId || "", Number.isNaN(activeIndex) ? 0 : activeIndex);
+      return;
+    }
+
+    if (!activeProjectModalState) {
+      return;
+    }
+
+    if (event.key === "Escape") {
+      closeProjectModal();
+      return;
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      setProjectModalActiveMedia((activeProjectModalState.activeIndex + 1) % activeProjectModalState.mediaItems.length);
+      return;
+    }
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      setProjectModalActiveMedia((activeProjectModalState.activeIndex - 1 + activeProjectModalState.mediaItems.length) % activeProjectModalState.mediaItems.length);
+    }
+  });
+}
+
+function initializeProjectMediaSwipe() {
+  if (document.body.dataset.projectMediaSwipeBound === "true") {
+    return;
+  }
+
+  document.body.dataset.projectMediaSwipeBound = "true";
+
+  const setTouchStart = (surface, touch) => {
+    surface.dataset.touchStartX = String(touch.clientX);
+    surface.dataset.touchStartY = String(touch.clientY);
+  };
+
+  const clearTouchStart = (surface) => {
+    delete surface.dataset.touchStartX;
+    delete surface.dataset.touchStartY;
+  };
+
+  document.addEventListener("touchstart", (event) => {
+    const surface = event.target instanceof Element
+      ? event.target.closest(".project-media-stack, .project-modal-stage")
+      : null;
+
+    if (!(surface instanceof HTMLElement) || event.touches.length !== 1) {
+      return;
+    }
+
+    setTouchStart(surface, event.touches[0]);
+  }, { passive: true });
+
+  document.addEventListener("touchend", (event) => {
+    const surface = event.target instanceof Element
+      ? event.target.closest(".project-media-stack, .project-modal-stage")
+      : null;
+
+    if (!(surface instanceof HTMLElement) || event.changedTouches.length !== 1) {
+      return;
+    }
+
+    const startX = Number.parseFloat(surface.dataset.touchStartX || "NaN");
+    const startY = Number.parseFloat(surface.dataset.touchStartY || "NaN");
+    clearTouchStart(surface);
+
+    if (Number.isNaN(startX) || Number.isNaN(startY)) {
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - startX;
+    const deltaY = touch.clientY - startY;
+
+    if (Math.abs(deltaX) < 48 || Math.abs(deltaX) < Math.abs(deltaY) * 1.2) {
+      return;
+    }
+
+    if (surface.classList.contains("project-modal-stage")) {
+      if (!activeProjectModalState || activeProjectModalState.mediaItems.length < 2) {
+        return;
+      }
+
+      const direction = deltaX < 0 ? 1 : -1;
+      const nextIndex = (activeProjectModalState.activeIndex + direction + activeProjectModalState.mediaItems.length)
+        % activeProjectModalState.mediaItems.length;
+      setProjectModalActiveMedia(nextIndex);
+      return;
+    }
+
+    const card = surface.closest(".project-card");
+    if (!(card instanceof HTMLElement)) {
+      return;
+    }
+
+    const slides = card.querySelectorAll(".project-media-slide");
+    if (slides.length < 2) {
+      return;
+    }
+
+    const activeIndex = Number.parseInt(card.dataset.activeMediaIndex || "0", 10);
+    const direction = deltaX < 0 ? 1 : -1;
+    const nextIndex = (activeIndex + direction + slides.length) % slides.length;
+    setProjectCardActiveMedia(card, nextIndex);
+  }, { passive: true });
+}
+
 function getSavedLanguage() {
   const savedLanguage = window.localStorage.getItem(languageStorageKey);
   return savedLanguage && translations[savedLanguage] ? savedLanguage : "en";
@@ -3632,6 +4079,8 @@ applyTranslations(initialLanguage);
 initializeCategoryFilters();
 initializeHomeProjectCategoryNavigation();
 initializeProjectMediaControls();
+initializeProjectModal();
+initializeProjectMediaSwipe();
 initializeAdminPanel();
 loadProjectsFromRepository().then(() => {
   applyTranslations(currentLanguage);
