@@ -90,7 +90,7 @@ const translations = {
       tagline: "We create exceptional spaces that feel calm, bold, and enduring.",
       menu: "Menu",
       contact: "Contact",
-      location: "Tirana, Albania",
+      location: "Prizren, KosovE",
       featuredResidenceAlt: "Monolith Architects featured residence",
     },
     form: {
@@ -109,13 +109,13 @@ const translations = {
         phone: "Phone",
         studio: "Studio",
       },
-      studioAddress: "Rr. e Kavajes, Tirana, Albania",
+      studioAddress: "Prizren, KosovE",
       submit: "Submit Inquiry",
       defaultNote: "Submit and your inquiry will be sent directly to our inbox.",
       sending: "Sending...",
       success: "Thank you. Your inquiry was sent successfully.",
       failure:
-        "Submission failed. Please try again or email monolitharchitects6@gmail.com.",
+        "Submission failed. Please try again or email monolitharchitects8@gmail.com.",
       subject: "New Monolith Architects inquiry",
     },
     projects: [
@@ -154,7 +154,7 @@ const translations = {
       title: "Monolith Architects",
       description:
         "Monolith Architects is a premium architecture studio crafting refined residential and commercial spaces.",
-      heroEyebrow: "Tirana Based Architecture Studio",
+      heroEyebrow: "Prizren Based Architecture Studio",
       heroTitle: "<span>We design</span><span>spaces that</span><span><em>inspire</em>.</span>",
       heroText:
         "Monolith Architects delivers elevated residential, hospitality, and commercial interiors with a focus on atmosphere, proportion, and material clarity.",
@@ -293,7 +293,7 @@ const translations = {
       tagline: "Krijojme hapesira te vecanta, me qetesi, karakter dhe elegance qe zgjat.",
       menu: "Menu",
       contact: "Kontakt",
-      location: "Tirane, Shqiperi",
+      location: "Prizren, KosovE",
       featuredResidenceAlt: "Rezidence e perzgjedhur nga Monolith Architects",
     },
     form: {
@@ -312,12 +312,12 @@ const translations = {
         phone: "Telefoni",
         studio: "Studio",
       },
-      studioAddress: "Rr. e Kavajes, Tirane, Shqiperi",
+      studioAddress: "Prizren, KosovE",
       submit: "Dergo kerkesen",
       defaultNote: "Dergoni kerkesen tuaj dhe ajo do te vije direkt ne inbox-in tone.",
       sending: "Duke derguar...",
       success: "Faleminderit. Kerkesa juaj u dergua me sukses.",
-      failure: "Dergimi nuk u realizua. Ju lutem provoni serish ose na shkruani ne monolitharchitects6@gmail.com.",
+      failure: "Dergimi nuk u realizua. Ju lutem provoni serish ose na shkruani ne monolitharchitects8@gmail.com.",
       subject: "Kerkese e re per Monolith Architects",
     },
     projects: [
@@ -356,7 +356,7 @@ const translations = {
       title: "Monolith Architects",
       description:
         "Monolith Architects eshte nje studio arkitekture qe krijon hapesira rezidenciale dhe komerciale me identitet te rafinuar.",
-      heroEyebrow: "Studio Arkitekture me Baze ne Tirane",
+      heroEyebrow: "Studio Arkitekture me Baze ne Prizren",
       heroTitle: "<span>Ne projektojme</span><span>hapesira qe</span><span><em>inspirojne</em>.</span>",
       heroText:
         "Monolith Architects sjell projekte rezidenciale, hospitality dhe komerciale me fokus te atmosfera, proporcioni dhe qartesia materiale.",
@@ -494,7 +494,7 @@ const translations = {
         "Nous créons des espaces d'exception, calmes, audacieux et durables.",
       menu: "Menu",
       contact: "Contact",
-      location: "Tirana, Albanie",
+      location: "Prizren, KosovE",
       featuredResidenceAlt: "Résidence emblématique de Monolith Architects",
     },
     form: {
@@ -513,13 +513,13 @@ const translations = {
         phone: "Téléphone",
         studio: "Studio",
       },
-      studioAddress: "Rr. e Kavajes, Tirana, Albanie",
+      studioAddress: "Prizren, KosovE",
       submit: "Envoyer la demande",
       defaultNote: "Envoyez votre demande et elle arrivera directement dans notre boîte mail.",
       sending: "Envoi en cours...",
       success: "Merci. Votre demande a bien été envoyée.",
       failure:
-        "Échec de l'envoi. Veuillez réessayer ou écrire à monolitharchitects6@gmail.com.",
+        "Échec de l'envoi. Veuillez réessayer ou écrire à monolitharchitects8@gmail.com.",
       subject: "Nouvelle demande Monolith Architects",
     },
     projects: [
@@ -558,7 +558,7 @@ const translations = {
       title: "Monolith Architects",
       description:
         "Monolith Architects est un studio d'architecture haut de gamme qui conçoit des espaces résidentiels et commerciaux raffinés.",
-      heroEyebrow: "Studio d'architecture basé à Tirana",
+      heroEyebrow: "Studio d'architecture basé à Prizren",
       heroTitle: "<span>Nous concevons</span><span>des espaces qui</span><span><em>inspirent</em>.</span>",
       heroText:
         "Monolith Architects réalise des intérieurs résidentiels, hôteliers et commerciaux raffinés, avec une attention portée à l'atmosphère, aux proportions et à la matière.",
@@ -698,7 +698,7 @@ const translations = {
         "Wir schaffen außergewöhnliche Räume, die ruhig, markant und dauerhaft wirken.",
       menu: "Menü",
       contact: "Kontakt",
-      location: "Tirana, Albanien",
+      location: "Prizren, KosovE",
       featuredResidenceAlt: "Ausgewähltes Wohnprojekt von Monolith Architects",
     },
     form: {
@@ -717,13 +717,13 @@ const translations = {
         phone: "Telefon",
         studio: "Studio",
       },
-      studioAddress: "Rr. e Kavajes, Tirana, Albanien",
+      studioAddress: "Prizren, KosovE",
       submit: "Anfrage senden",
       defaultNote: "Senden Sie Ihre Anfrage, und sie wird direkt an unser Postfach übermittelt.",
       sending: "Wird gesendet...",
       success: "Vielen Dank. Ihre Anfrage wurde erfolgreich gesendet.",
       failure:
-        "Senden fehlgeschlagen. Bitte versuchen Sie es erneut oder schreiben Sie an monolitharchitects6@gmail.com.",
+        "Senden fehlgeschlagen. Bitte versuchen Sie es erneut oder schreiben Sie an monolitharchitects8@gmail.com.",
       subject: "Neue Anfrage an Monolith Architects",
     },
     projects: [
@@ -762,7 +762,7 @@ const translations = {
       title: "Monolith Architects",
       description:
         "Monolith Architects ist ein Premium-Architekturstudio für raffinierte Wohn- und Gewerberäume.",
-      heroEyebrow: "Architekturstudio aus Tirana",
+      heroEyebrow: "Architekturstudio aus Prizren",
       heroTitle: "<span>Wir entwerfen</span><span>Räume, die</span><span><em>inspirieren</em>.</span>",
       heroText:
         "Monolith Architects realisiert hochwertige Wohn-, Hospitality- und Gewerbeinterieurs mit Fokus auf Atmosphäre, Proportion und Materialklarheit.",
@@ -902,7 +902,7 @@ const translations = {
         "Мы создаём исключительные пространства, спокойные, выразительные и долговечные.",
       menu: "Меню",
       contact: "Контакты",
-      location: "Тирана, Албания",
+      location: "Prizren, KosovE",
       featuredResidenceAlt: "Избранный жилой проект Monolith Architects",
     },
     form: {
@@ -921,13 +921,13 @@ const translations = {
         phone: "Телефон",
         studio: "Студия",
       },
-      studioAddress: "Rr. e Kavajes, Тирана, Албания",
+      studioAddress: "Prizren, KosovE",
       submit: "Отправить запрос",
       defaultNote: "Отправьте запрос, и он будет доставлен прямо в наш почтовый ящик.",
       sending: "Отправка...",
       success: "Спасибо. Ваш запрос успешно отправлен.",
       failure:
-        "Не удалось отправить. Попробуйте ещё раз или напишите на monolitharchitects6@gmail.com.",
+        "Не удалось отправить. Попробуйте ещё раз или напишите на monolitharchitects8@gmail.com.",
       subject: "Новый запрос Monolith Architects",
     },
     projects: [
@@ -966,7 +966,7 @@ const translations = {
       title: "Monolith Architects",
       description:
         "Monolith Architects — архитектурная студия премиум-класса, создающая изысканные жилые и коммерческие пространства.",
-      heroEyebrow: "Архитектурная студия в Тиране",
+      heroEyebrow: "Архитектурная студия в Призрене",
       heroTitle: "<span>Мы создаём</span><span>пространства, которые</span><span><em>вдохновляют</em>.</span>",
       heroText:
         "Monolith Architects создаёт выразительные жилые, гостиничные и коммерческие интерьеры с акцентом на атмосферу, пропорции и материальность.",
@@ -1105,7 +1105,7 @@ const translations = {
       tagline: "نصمم مساحات استثنائية تبدو هادئة وجريئة وخالدة.",
       menu: "القائمة",
       contact: "اتصال",
-      location: "تيرانا، ألبانيا",
+      location: "Prizren, KosovE",
       featuredResidenceAlt: "مشروع سكني مميز من مونوليث أركيتكتس",
     },
     form: {
@@ -1124,13 +1124,13 @@ const translations = {
         phone: "الهاتف",
         studio: "الاستوديو",
       },
-      studioAddress: "Rr. e Kavajes، تيرانا، ألبانيا",
+      studioAddress: "Prizren, KosovE",
       submit: "إرسال الطلب",
       defaultNote: "أرسل طلبك وسيصل مباشرة إلى بريدنا الإلكتروني.",
       sending: "جارٍ الإرسال...",
       success: "شكرًا لك. تم إرسال طلبك بنجاح.",
       failure:
-        "فشل الإرسال. يرجى المحاولة مرة أخرى أو مراسلتنا على monolitharchitects6@gmail.com.",
+        "فشل الإرسال. يرجى المحاولة مرة أخرى أو مراسلتنا على monolitharchitects8@gmail.com.",
       subject: "استفسار جديد إلى Monolith Architects",
     },
     projects: [
@@ -1169,7 +1169,7 @@ const translations = {
       title: "Monolith Architects",
       description:
         "Monolith Architects استوديو معماري فاخر يصمم مساحات سكنية وتجارية راقية.",
-      heroEyebrow: "استوديو عمارة مقره تيرانا",
+      heroEyebrow: "استوديو عمارة مقره بريزرن",
       heroTitle: "<span>نصمم</span><span>مساحات</span><span><em>ملهمة</em>.</span>",
       heroText:
         "تقدم Monolith Architects تصاميم داخلية سكنية وفندقية وتجارية راقية مع تركيز على الأجواء والنسب ووضوح المواد.",
@@ -1307,7 +1307,7 @@ const translations = {
       tagline: "我们打造平静、大胆且经久耐看的卓越空间。",
       menu: "菜单",
       contact: "联系",
-      location: "地拉那，阿尔巴尼亚",
+      location: "Prizren, KosovE",
       featuredResidenceAlt: "Monolith Architects 精选住宅项目",
     },
     form: {
@@ -1326,12 +1326,12 @@ const translations = {
         phone: "电话",
         studio: "工作室",
       },
-      studioAddress: "Rr. e Kavajes，地拉那，阿尔巴尼亚",
+      studioAddress: "Prizren, KosovE",
       submit: "提交咨询",
       defaultNote: "提交后，您的咨询将直接发送到我们的邮箱。",
       sending: "发送中...",
       success: "谢谢，您的咨询已成功发送。",
-      failure: "提交失败。请重试，或发送邮件至 monolitharchitects6@gmail.com。",
+      failure: "提交失败。请重试，或发送邮件至 monolitharchitects8@gmail.com。",
       subject: "新的 Monolith Architects 咨询",
     },
     projects: [
@@ -1369,7 +1369,7 @@ const translations = {
     home: {
       title: "Monolith Architects",
       description: "Monolith Architects 是一家高端建筑事务所，打造精致的住宅与商业空间。",
-      heroEyebrow: "地拉那建筑设计工作室",
+      heroEyebrow: "普里兹伦建筑设计工作室",
       heroTitle: "<span>我们设计</span><span>能够带来</span><span><em>灵感</em>的空间。</span>",
       heroText:
         "Monolith Architects 打造高品质住宅、酒店和商业室内空间，专注于氛围、比例与材料表达。",
@@ -2024,6 +2024,21 @@ function getCategoryLabel(categorySlug) {
   const localizedCategory = categoryPageTranslations[currentLanguage]?.categories?.[categorySlug];
   const defaultCategory = categoryPageTranslations.en.categories[categorySlug];
   return localizedCategory?.heroTitle || defaultCategory?.heroTitle || categorySlug;
+}
+
+function getCategoryServiceCards(language = currentLanguage) {
+  const languageCopy = categoryPageTranslations[language] || categoryPageTranslations.en;
+
+  return categoryOrder.map((categorySlug) => {
+    const categoryCopy = languageCopy.categories?.[categorySlug]
+      || categoryPageTranslations.en.categories?.[categorySlug]
+      || {};
+
+    return {
+      title: categoryCopy.serviceTitle || categoryCopy.heroTitle || categorySlug,
+      description: categoryCopy.serviceDescription || categoryCopy.heroText || "",
+    };
+  });
 }
 
 async function loadProjectsFromRepository() {
@@ -3179,7 +3194,7 @@ function applyHomePage(copy) {
     setText(servicesHeading.querySelector("h2"), copy.home.servicesHeading);
   }
 
-  applyServiceCards(copy.home.services);
+  applyServiceCards(getCategoryServiceCards());
 
   const contactCopy = document.querySelector(".contact-copy");
   if (contactCopy) {
