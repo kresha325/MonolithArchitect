@@ -2,8 +2,6 @@
 
 This site is already prepared to use Decap CMS with the GitHub backend.
 
-The Netlify-based admin login is now working.
-
 ## Current repository settings
 
 - Repository: `kresha325/MonolithArchitect`
