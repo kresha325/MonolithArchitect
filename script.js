@@ -6,14 +6,10 @@ const formNote = document.querySelector("#formNote");
 const bodyPage = document.body.dataset.page;
 const languageStorageKey = "monolith-language";
 const projectStorageKey = "monolith-projects";
-const adminAccessSessionKey = "monolith-admin-access";
-const adminSecretPhrase = "monolithadmin";
 let languageDropdownTrigger = null;
 let languageDropdownMenu = null;
 let languageDropdownRoot = null;
 let languageDropdownHideTimer = null;
-let adminAccessBuffer = "";
-let adminAccessTimer = null;
 let projectCatalogCache = [];
 let projectsDataLoaded = false;
 
@@ -1990,93 +1986,6 @@ function getProjectsDataHref() {
   return relativePaths[bodyPage] || "./data/projects.json";
 }
 
-function getAdminPageHref() {
-  const relativePrefixes = {
-    home: "./admin/index.html",
-    projects: "../admin/index.html",
-    about: "../admin/index.html",
-    services: "../admin/index.html",
-    contact: "../admin/index.html",
-    category: "../../admin/index.html",
-    admin: "../admin/index.html",
-  };
-
-  return relativePrefixes[bodyPage] || "./admin/index.html";
-}
-
-function getHomePageHref() {
-  const relativePrefixes = {
-    home: "./index.html",
-    projects: "../index.html",
-    about: "../index.html",
-    services: "../index.html",
-    contact: "../index.html",
-    category: "../../index.html",
-    admin: "../index.html",
-  };
-
-  return relativePrefixes[bodyPage] || "./index.html";
-}
-
-function hasAdminAccess() {
-  return window.sessionStorage.getItem(adminAccessSessionKey) === "granted";
-}
-
-function grantAdminAccess() {
-  window.sessionStorage.setItem(adminAccessSessionKey, "granted");
-  window.location.href = buildLocalizedHref(getAdminPageHref(), currentLanguage);
-}
-
-function resetHiddenAdminSequence() {
-  adminAccessBuffer = "";
-  window.clearTimeout(adminAccessTimer);
-}
-
-function initializeHiddenAdminAccess() {
-  if (document.body.dataset.adminShortcutBound === "true") {
-    return;
-  }
-
-  document.body.dataset.adminShortcutBound = "true";
-
-  document.addEventListener("keydown", (event) => {
-    const isTypingTarget =
-      event.target instanceof HTMLElement
-      && (event.target.isContentEditable
-        || ["INPUT", "TEXTAREA", "SELECT"].includes(event.target.tagName));
-
-    if (isTypingTarget) {
-      return;
-    }
-
-    if (event.ctrlKey || event.metaKey || event.altKey) {
-      resetHiddenAdminSequence();
-      return;
-    }
-
-    if (event.key.length !== 1) {
-      return;
-    }
-
-    adminAccessBuffer = `${adminAccessBuffer}${event.key.toLowerCase()}`.slice(-adminSecretPhrase.length);
-    window.clearTimeout(adminAccessTimer);
-    adminAccessTimer = window.setTimeout(resetHiddenAdminSequence, 3200);
-
-    if (adminAccessBuffer === adminSecretPhrase) {
-      resetHiddenAdminSequence();
-      grantAdminAccess();
-    }
-  });
-}
-
-function enforceAdminAccess() {
-  if (bodyPage !== "admin" || hasAdminAccess()) {
-    return;
-  }
-
-  window.location.replace(buildLocalizedHref(getHomePageHref(), currentLanguage));
-}
-
 function getProjectEmptyStateText() {
   return currentLanguage === "sq" ? "Nuk ka projekte ende." : "No projects yet.";
 }
@@ -3401,13 +3310,11 @@ if (contactForm instanceof HTMLFormElement && formNote) {
 
 const initialLanguage = getPreferredLanguage();
 currentLanguage = initialLanguage;
-enforceAdminAccess();
 window.localStorage.setItem(languageStorageKey, initialLanguage);
 applyTranslations(initialLanguage);
 initializeCategoryFilters();
 initializeHomeProjectCategoryNavigation();
 initializeAdminPanel();
-initializeHiddenAdminAccess();
 loadProjectsFromRepository().then(() => {
   applyTranslations(currentLanguage);
   initializeHomeProjectCategoryNavigation();

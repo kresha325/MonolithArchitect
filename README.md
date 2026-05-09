@@ -42,7 +42,9 @@ Static multipage portfolio website for Monolith Architects.
 
 Open `index.html` in a browser or serve the folder with a local static server.
 
-To manage projects in production, open `admin/index.html` after configuring Decap CMS GitHub authentication.
+To manage projects through CMS, use the Netlify admin URL:
+
+- `https://monolitharchitect.netlify.app/admin/`
 
 ## GitHub Pages deploy
 
@@ -59,11 +61,11 @@ To enable it in GitHub:
 3. Set `Source` to `GitHub Actions`.
 4. Push to `main` and wait for the `Deploy GitHub Pages` workflow to finish.
 
-## Decap CMS setup still required
+## CMS access
 
-1. If your default branch changes from `main`, update `branch:` in `admin/config.yml`.
-2. Deploy or configure a GitHub OAuth/auth proxy for Decap CMS and add its URL as `base_url:` in `admin/config.yml`.
+1. Use `https://monolitharchitect.netlify.app/admin/` for content editing.
+2. Keep the public site on GitHub Pages at `https://kresha325.github.io/MonolithArchitect/`.
 3. Make sure the GitHub user who logs into the CMS has push access to the repository.
-4. Serve the site over `http://` or `https://` when testing the CMS. Direct `file://` opening is not enough for authenticated editing.
+4. If your default branch changes from `main`, update `branch:` in `admin/config.yml`.
 
 See `docs/decap-oauth-setup.md` for the exact remaining OAuth steps and the values you need to prepare.

@@ -2,7 +2,7 @@
 
 This site is already prepared to use Decap CMS with the GitHub backend.
 
-The remaining missing part is an OAuth/auth proxy so Decap can log in to GitHub and write changes back to the repository.
+The Netlify-based admin login is now working.
 
 ## Current repository settings
 
@@ -11,66 +11,33 @@ The remaining missing part is an OAuth/auth proxy so Decap can log in to GitHub 
 - CMS config file: `admin/config.yml`
 - CMS entry page: `admin/index.html`
 
-## What still needs to exist
+## Current live URLs
 
-You need one small external auth service with a public HTTPS URL.
+- Public site: `https://kresha325.github.io/MonolithArchitect/`
+- Netlify admin: `https://monolitharchitect.netlify.app/admin/`
 
-After that service exists, its base URL will be added to `admin/config.yml` like this:
+## Active setup
 
-```yml
-backend:
-  name: github
-  repo: kresha325/MonolithArchitect
-  branch: main
-  base_url: https://your-auth-service.example.com
-```
+For this project, the active setup is:
 
-## Recommended path
+- keep the public website on GitHub Pages
+- deploy the same repo once on Netlify
+- use the Netlify URL only for `admin/` login and content editing
 
-Use a separate auth proxy deployment and keep the portfolio itself on GitHub Pages.
+Netlify handles the GitHub OAuth flow for Decap CMS, while GitHub Pages continues to serve the public site.
 
-That is the cleanest setup for your current project because:
+In this setup, you do not need `base_url` in `admin/config.yml` as long as you access the CMS from the Netlify-hosted copy.
 
-- the website stays static on GitHub Pages
-- Decap CMS keeps using the GitHub backend
-- only the auth flow is hosted elsewhere
+## Admin usage
 
-## What I need from you
+1. Open `https://monolitharchitect.netlify.app/admin/`.
+2. Log in with GitHub.
+3. Edit the `Projects` entry.
+4. Save changes so Decap CMS commits them to the repository.
+5. Let GitHub Pages deploy the updated public site from `main`.
 
-Send these 4 things and I can finish the remaining config safely:
+## Notes
 
-1. Which platform you want for the auth proxy: `Netlify`, `Vercel`, or `Cloudflare`
-2. The public URL of that auth proxy after you create/deploy it
-3. Confirmation of the exact GitHub repo: `kresha325/MonolithArchitect`
-4. Which GitHub users should be allowed to log in and edit content
-
-## What you need to create on GitHub
-
-Create a GitHub OAuth App for the auth proxy.
-
-You will need these values during setup:
-
-- Application name: anything you want, for example `Monolith Architect CMS`
-- Homepage URL: the public URL of your auth proxy
-- Authorization callback URL: the callback URL required by the auth proxy you choose
-
-After GitHub creates the app, you will get:
-
-- Client ID
-- Client Secret
-
-Do not commit the client secret into this repo.
-
-## What I can do after you send the details
-
-Once you send the platform and the deployed auth URL, I can:
-
-1. update `admin/config.yml` with the real `base_url`
-2. update the README so the final production steps are accurate
-3. give you the exact callback URL and GitHub OAuth values to enter if you want a platform-specific walkthrough
-
-## What I cannot do from here
-
-I cannot create the GitHub OAuth App inside your GitHub account or see your client secret.
-
-Those two parts must be done by you in your GitHub and hosting accounts.
+- The old hidden shortcut `monolithadmin` is no longer part of the active admin workflow.
+- The public site stays on GitHub Pages.
+- The admin workflow now lives on the Netlify URL only.

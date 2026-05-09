@@ -2,6 +2,8 @@ backend:
   name: github
   repo: kresha325/MonolithArchitect
   branch: main
+  # If you use a Netlify-hosted copy of this repo for /admin, you can often
+  # authenticate there without adding base_url here.
   # For GitHub Pages you still need an OAuth/auth proxy.
   # Add its URL here after you deploy it, for example:
   # base_url: https://your-auth-site.example.com
