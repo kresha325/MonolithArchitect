@@ -5,10 +5,17 @@ const contactForm = document.querySelector("#contactForm");
 const formNote = document.querySelector("#formNote");
 const bodyPage = document.body.dataset.page;
 const languageStorageKey = "monolith-language";
+const projectStorageKey = "monolith-projects";
+const adminAccessSessionKey = "monolith-admin-access";
+const adminSecretPhrase = "monolithadmin";
 let languageDropdownTrigger = null;
 let languageDropdownMenu = null;
 let languageDropdownRoot = null;
 let languageDropdownHideTimer = null;
+let adminAccessBuffer = "";
+let adminAccessTimer = null;
+let projectCatalogCache = [];
+let projectsDataLoaded = false;
 
 const localizedLanguageNames = {
   en: {
@@ -82,6 +89,7 @@ const translations = {
     openMenu: "Open menu",
     homeAria: "Monolith Architects home",
     nav: ["Home", "Projects", "About", "Services", "Contact"],
+    adminLink: "Admin",
     footer: {
       tagline: "We create exceptional spaces that feel calm, bold, and enduring.",
       menu: "Menu",
@@ -284,6 +292,7 @@ const translations = {
     openMenu: "Hap menune",
     homeAria: "Ballina e Monolith Architects",
     nav: ["Kreu", "Projektet", "Rreth Nesh", "Sherbimet", "Kontakt"],
+    adminLink: "Admin",
     footer: {
       tagline: "Krijojme hapesira te vecanta, me qetesi, karakter dhe elegance qe zgjat.",
       menu: "Menu",
@@ -483,6 +492,7 @@ const translations = {
     openMenu: "Ouvrir le menu",
     homeAria: "Accueil Monolith Architects",
     nav: ["Accueil", "Projets", "À propos", "Services", "Contact"],
+    adminLink: "Admin",
     footer: {
       tagline:
         "Nous créons des espaces d'exception, calmes, audacieux et durables.",
@@ -686,6 +696,7 @@ const translations = {
     openMenu: "Menü öffnen",
     homeAria: "Monolith Architects Startseite",
     nav: ["Start", "Projekte", "Über uns", "Leistungen", "Kontakt"],
+    adminLink: "Admin",
     footer: {
       tagline:
         "Wir schaffen außergewöhnliche Räume, die ruhig, markant und dauerhaft wirken.",
@@ -889,6 +900,7 @@ const translations = {
     openMenu: "Открыть меню",
     homeAria: "Главная Monolith Architects",
     nav: ["Главная", "Проекты", "О нас", "Услуги", "Контакты"],
+    adminLink: "Админ",
     footer: {
       tagline:
         "Мы создаём исключительные пространства, спокойные, выразительные и долговечные.",
@@ -1092,6 +1104,7 @@ const translations = {
     openMenu: "افتح القائمة",
     homeAria: "الصفحة الرئيسية لمونوليث أركيتكتس",
     nav: ["الرئيسية", "المشاريع", "من نحن", "الخدمات", "اتصل بنا"],
+    adminLink: "الإدارة",
     footer: {
       tagline: "نصمم مساحات استثنائية تبدو هادئة وجريئة وخالدة.",
       menu: "القائمة",
@@ -1293,6 +1306,7 @@ const translations = {
     openMenu: "打开菜单",
     homeAria: "Monolith Architects 首页",
     nav: ["首页", "项目", "关于", "服务", "联系"],
+    adminLink: "管理",
     footer: {
       tagline: "我们打造平静、大胆且经久耐看的卓越空间。",
       menu: "菜单",
@@ -1468,7 +1482,1056 @@ const translations = {
   },
 };
 
+const categoryPageTranslations = {
+  en: {
+    openCategoryPage: "Open category page",
+    categories: {
+      exterior: {
+        title: "Exterior | Monolith Architects",
+        description:
+          "Exterior architecture category page featuring related projects and services by Monolith Architects.",
+        heroEyebrow: "Category",
+        heroTitle: "Exterior",
+        heroText:
+          "Facades, envelopes, and first impressions shaped with proportion, clarity, and atmospheric detail.",
+        overviewEyebrow: "Overview",
+        overviewHeading:
+          "<span>Exterior concepts</span><span>with clear visual identity.</span>",
+        overviewText:
+          "This category focuses on architectural presence, facade rhythm, material expression, and the way a project is experienced from the outside.",
+        cta: "Start your project",
+        serviceTitle: "Exterior",
+        serviceDescription:
+          "Facade studies, massing, material palettes, and exterior design development for residential and commercial projects.",
+        relatedEyebrow: "Related Projects",
+        relatedHeading:
+          "<span>Projects inside the</span><span>Exterior category.</span>",
+        allProjects: "All projects",
+      },
+      interior: {
+        title: "Interior | Monolith Architects",
+        description:
+          "Interior category page featuring related projects and services by Monolith Architects.",
+        heroEyebrow: "Category",
+        heroTitle: "Interior",
+        heroText:
+          "Refined living environments shaped through spatial warmth, balanced composition, and material sensitivity.",
+        overviewEyebrow: "Overview",
+        overviewHeading:
+          "<span>Interior spaces</span><span>with atmosphere and clarity.</span>",
+        overviewText:
+          "This category presents interior-led work focused on daily comfort, material coherence, and a calm but expressive spatial language.",
+        cta: "Start your project",
+        serviceTitle: "Interior",
+        serviceDescription:
+          "Interior concepts, moodboards, space planning, and finish selection tailored to the character of each space.",
+        relatedEyebrow: "Related Projects",
+        relatedHeading:
+          "<span>Projects inside the</span><span>Interior category.</span>",
+        allProjects: "All projects",
+      },
+      "3d-rendering": {
+        title: "3D Rendering | Monolith Architects",
+        description:
+          "3D Rendering category page featuring related projects and services by Monolith Architects.",
+        heroEyebrow: "Category",
+        heroTitle: "3D Rendering",
+        heroText:
+          "Still imagery that brings architecture to life with lighting, texture, depth, and a precise visual atmosphere.",
+        overviewEyebrow: "Overview",
+        overviewHeading:
+          "<span>Rendered imagery</span><span>that clarifies the vision.</span>",
+        overviewText:
+          "This category is dedicated to high-detail still rendering for concept approval, presentations, and pre-construction storytelling.",
+        cta: "Start your project",
+        serviceTitle: "3D Rendering",
+        serviceDescription:
+          "High-detail still visualizations that present lighting, materials, and atmosphere clearly before execution.",
+        relatedEyebrow: "Related Projects",
+        relatedHeading:
+          "<span>Projects inside the</span><span>3D Rendering category.</span>",
+        allProjects: "All projects",
+      },
+      "3d-animation": {
+        title: "3D Animation | Monolith Architects",
+        description:
+          "3D Animation category page featuring related projects and services by Monolith Architects.",
+        heroEyebrow: "Category",
+        heroTitle: "3D Animation",
+        heroText:
+          "Motion-driven storytelling that shows sequence, scale, and the lived experience of architecture before it is built.",
+        overviewEyebrow: "Overview",
+        overviewHeading:
+          "<span>Animated walkthroughs</span><span>that make space readable.</span>",
+        overviewText:
+          "This category highlights animation-led presentation, helping teams and clients understand movement, atmosphere, and visual sequence.",
+        cta: "Start your project",
+        serviceTitle: "3D Animation",
+        serviceDescription:
+          "Cinematic walkthroughs and animated sequences that communicate scale, movement, and spatial experience.",
+        relatedEyebrow: "Related Projects",
+        relatedHeading:
+          "<span>Projects inside the</span><span>3D Animation category.</span>",
+        allProjects: "All projects",
+      },
+    },
+  },
+  sq: {
+    openCategoryPage: "Hap faqen e kategorise",
+    categories: {
+      exterior: {
+        title: "Exterior | Monolith Architects",
+        description:
+          "Faqja e kategorise Exterior me projektet dhe sherbimet perkatese nga Monolith Architects.",
+        heroEyebrow: "Kategoria",
+        heroTitle: "Exterior",
+        heroText:
+          "Fasadat, pamja e jashtme dhe pershtypja e pare te formesuara me proporcion, qartesi dhe atmosfere.",
+        overviewEyebrow: "Permbledhje",
+        overviewHeading:
+          "<span>Koncepte Exterior</span><span>me identitet vizual te qarte.</span>",
+        overviewText:
+          "Kjo kategori fokusohet te prania arkitekturore, ritmi i fasades, shprehja materiale dhe menyra si perjetohet projekti nga jashte.",
+        cta: "Nisni projektin tuaj",
+        serviceTitle: "Exterior",
+        serviceDescription:
+          "Studime fasade, volumetri, paleta materialesh dhe zhvillim i dizajnit te jashtem per projekte rezidenciale dhe komerciale.",
+        relatedEyebrow: "Projektet perkatese",
+        relatedHeading:
+          "<span>Projektet brenda</span><span>kategorise Exterior.</span>",
+        allProjects: "Te gjitha projektet",
+      },
+      interior: {
+        title: "Interior | Monolith Architects",
+        description:
+          "Faqja e kategorise Interior me projektet dhe sherbimet perkatese nga Monolith Architects.",
+        heroEyebrow: "Kategoria",
+        heroTitle: "Interior",
+        heroText:
+          "Ambiente te rafinuara te formesuara me ngrohtesi hapesinore, kompozim te balancuar dhe ndjeshmeri materiale.",
+        overviewEyebrow: "Permbledhje",
+        overviewHeading:
+          "<span>Hapesira Interior</span><span>me atmosfere dhe qartesi.</span>",
+        overviewText:
+          "Kjo kategori paraqet pune te orientuara nga interieri me fokus te komoditeti i perditshem, koherenca materiale dhe nje gjuhe hapesinore e qete por ekspresive.",
+        cta: "Nisni projektin tuaj",
+        serviceTitle: "Interior",
+        serviceDescription:
+          "Koncepte interieri, moodboard-e, planifikim hapesinor dhe perzgjedhje finisazhesh sipas karakterit te cdo ambienti.",
+        relatedEyebrow: "Projektet perkatese",
+        relatedHeading:
+          "<span>Projektet brenda</span><span>kategorise Interior.</span>",
+        allProjects: "Te gjitha projektet",
+      },
+      "3d-rendering": {
+        title: "3D Rendering | Monolith Architects",
+        description:
+          "Faqja e kategorise 3D Rendering me projektet dhe sherbimet perkatese nga Monolith Architects.",
+        heroEyebrow: "Kategoria",
+        heroTitle: "3D Rendering",
+        heroText:
+          "Imazhe statike qe e sjellin arkitekturen ne jete me drite, teksture, thellesi dhe atmosfere te sakte vizuale.",
+        overviewEyebrow: "Permbledhje",
+        overviewHeading:
+          "<span>Imazhe te renderuara</span><span>qe qartesojne vizionin.</span>",
+        overviewText:
+          "Kjo kategori i dedikohet renderimeve statike me nivel te larte detaji per prezantim koncepti, aprovim dhe komunikim para zbatimit.",
+        cta: "Nisni projektin tuaj",
+        serviceTitle: "3D Rendering",
+        serviceDescription:
+          "Vizualizime statike me detaj te larte qe paraqesin qarte ndricimin, materialet dhe atmosferen perpara realizimit.",
+        relatedEyebrow: "Projektet perkatese",
+        relatedHeading:
+          "<span>Projektet brenda</span><span>kategorise 3D Rendering.</span>",
+        allProjects: "Te gjitha projektet",
+      },
+      "3d-animation": {
+        title: "3D Animation | Monolith Architects",
+        description:
+          "Faqja e kategorise 3D Animation me projektet dhe sherbimet perkatese nga Monolith Architects.",
+        heroEyebrow: "Kategoria",
+        heroTitle: "3D Animation",
+        heroText:
+          "Storytelling ne levizje qe tregon sekuencen, shkallen dhe perjetimin real te arkitektures perpara se te ndertohet.",
+        overviewEyebrow: "Permbledhje",
+        overviewHeading:
+          "<span>Walkthrough-e te animuara</span><span>qe e bejne hapesiren te lexueshme.</span>",
+        overviewText:
+          "Kjo kategori ve ne pah prezantimin permes animacionit, duke ndihmuar ekipet dhe klientet te kuptojne levizjen, atmosferen dhe sekuencen vizuale.",
+        cta: "Nisni projektin tuaj",
+        serviceTitle: "3D Animation",
+        serviceDescription:
+          "Walkthrough-e kinematike dhe sekuenca te animuara qe komunikojne shkallen, levizjen dhe perjetimin e hapesires.",
+        relatedEyebrow: "Projektet perkatese",
+        relatedHeading:
+          "<span>Projektet brenda</span><span>kategorise 3D Animation.</span>",
+        allProjects: "Te gjitha projektet",
+      },
+    },
+  },
+};
+
+const adminPageTranslations = {
+  en: {
+    title: "Admin | Monolith Architects",
+    description: "Local admin panel for managing projects.",
+    eyebrow: "Project Admin",
+    heading: "Add and edit projects.",
+    note:
+      "Changes are applied directly to this site in your current browser via localStorage, without a backend.",
+    formTitle: "Project form",
+    listTitle: "Current projects",
+    labels: {
+      title: "Project titles",
+      category: "Category",
+      images: "Project images",
+      alt: "Image alt texts",
+      number: "Project number",
+    },
+    localizedFields: {
+      title: "Add the project title for each language.",
+      alt: "Add the image alt text for each language.",
+    },
+    placeholders: {
+      title: "Modern Retreat",
+      alt: "Luxury residential villa exterior",
+      number: "01",
+    },
+    gallery: {
+      dropTitle: "Drag and drop multiple images here",
+      dropHint: "or choose images from your device",
+      choose: "Choose images",
+      help: "The first image is used as the project cover. Keep files optimized because browser storage is limited.",
+      empty: "No images selected yet.",
+      cover: "Cover",
+      remove: "Remove",
+      required: "Add at least one image for this project.",
+      invalid: "Only image files are supported.",
+      storageLimit: "The browser storage is full. Use fewer or smaller images.",
+    },
+    buttons: {
+      create: "Save project",
+      update: "Update project",
+      cancel: "Cancel edit",
+      edit: "Edit",
+    },
+    empty: "No projects saved yet.",
+  },
+  sq: {
+    title: "Admin | Monolith Architects",
+    description: "Panel lokal admin per menaxhimin e projekteve.",
+    eyebrow: "Admin i Projekteve",
+    heading: "Shto dhe ndrysho projekte.",
+    note:
+      "Ndryshimet aplikohen direkt ne kete projekt ne browser-in aktual me localStorage, pa backend.",
+    formTitle: "Formulari i projektit",
+    listTitle: "Projektet aktuale",
+    labels: {
+      title: "Titujt e projektit",
+      category: "Kategoria",
+      images: "Fotot e projektit",
+      alt: "Tekstet alt te fotos",
+      number: "Numri i projektit",
+    },
+    localizedFields: {
+      title: "Shto titullin e projektit per secilen gjuhe.",
+      alt: "Shto tekstin alt te fotos per secilen gjuhe.",
+    },
+    placeholders: {
+      title: "Modern Retreat",
+      alt: "Pamje e jashtme e nje vile luksoze",
+      number: "01",
+    },
+    gallery: {
+      dropTitle: "Terhiq dhe lesho disa foto ketu",
+      dropHint: "ose zgjidh foto nga pajisja jote",
+      choose: "Zgjidh foto",
+      help: "Fotoja e pare perdoret si cover i projektit. Mbaji skedaret te optimizuar sepse memoria e browser-it eshte e kufizuar.",
+      empty: "Nuk ka ende foto te zgjedhura.",
+      cover: "Cover",
+      remove: "Hiqe",
+      required: "Shto te pakten nje foto per kete projekt.",
+      invalid: "Lejohen vetem skedare imazhesh.",
+      storageLimit: "Memoria e browser-it eshte plotesuar. Përdor me pak ose foto me te vogla.",
+    },
+    buttons: {
+      create: "Ruaj projektin",
+      update: "Perditeso projektin",
+      cancel: "Anulo ndryshimin",
+      edit: "Ndrysho",
+    },
+    empty: "Nuk ka ende projekte te ruajtura.",
+  },
+};
+
+const categoryOrder = ["exterior", "interior", "3d-rendering", "3d-animation"];
+const projectTranslationLanguages = ["en", "sq", "fr", "de", "ru", "ar", "zh"];
+
+const defaultProjectCatalog = [
+  {
+    id: "modern-retreat",
+    title: "Modern Retreat",
+    categorySlug: "exterior",
+    image:
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1200&q=80",
+    alt: "Luxury residential villa exterior",
+    number: "01",
+  },
+  {
+    id: "city-apartment",
+    title: "City Apartment",
+    categorySlug: "interior",
+    image:
+      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+    alt: "Minimal living room with warm tones",
+    number: "02",
+  },
+  {
+    id: "minimal-house",
+    title: "Minimal House",
+    categorySlug: "3d-rendering",
+    image:
+      "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
+    alt: "Minimal architectural entrance",
+    number: "03",
+  },
+  {
+    id: "office-building",
+    title: "Office Building",
+    categorySlug: "exterior",
+    image:
+      "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80",
+    alt: "Glass office building facade",
+    number: "04",
+  },
+  {
+    id: "modern-kitchen",
+    title: "Modern Kitchen",
+    categorySlug: "interior",
+    image:
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80",
+    alt: "Contemporary kitchen interior",
+    number: "05",
+  },
+  {
+    id: "hillside-villa",
+    title: "Hillside Villa",
+    categorySlug: "3d-animation",
+    image:
+      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+    alt: "Warm bedroom interior with soft natural light",
+    number: "06",
+  },
+];
+
+projectCatalogCache = defaultProjectCatalog.map((project, index) => normalizeProject(project, index));
+
 let currentLanguage = "en";
+let currentAdminImages = [];
+
+function getLanguageDisplayLabel(language) {
+  const labels = localizedLanguageNames[currentLanguage] || localizedLanguageNames.en;
+  return labels[language] || language.toUpperCase();
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function slugifyProjectId(value) {
+  const slug = String(value ?? "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return slug || `project-${Date.now()}`;
+}
+
+function normalizeProjectImages(images, image, fallbackImage) {
+  const sourceImages = Array.isArray(images) && images.length
+    ? images
+    : [image || fallbackImage];
+
+  return sourceImages.map((item) => String(item ?? "").trim()).filter(Boolean);
+}
+
+function readImageFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => reject(new Error("Failed to read image"));
+    reader.readAsDataURL(file);
+  });
+}
+
+function normalizeLocalizedField(value, fallbackValue = "") {
+  const fallback = String(fallbackValue ?? "").trim();
+
+  if (typeof value === "string") {
+    const normalizedValue = value.trim() || fallback;
+    return Object.fromEntries(projectTranslationLanguages.map((language) => [language, normalizedValue]));
+  }
+
+  if (value && typeof value === "object") {
+    const firstAvailable = projectTranslationLanguages
+      .map((language) => String(value[language] ?? "").trim())
+      .find(Boolean) || fallback;
+
+    return Object.fromEntries(
+      projectTranslationLanguages.map((language) => [language, String(value[language] ?? "").trim() || firstAvailable]),
+    );
+  }
+
+  return Object.fromEntries(projectTranslationLanguages.map((language) => [language, fallback]));
+}
+
+function getLocalizedProjectValue(value, language = currentLanguage) {
+  const normalizedValue = normalizeLocalizedField(value);
+  return normalizedValue[language] || normalizedValue.en || Object.values(normalizedValue).find(Boolean) || "";
+}
+
+function normalizeProject(project, index) {
+  const fallback = defaultProjectCatalog[index] || defaultProjectCatalog[0];
+  const categorySlug = categoryOrder.includes(project?.categorySlug)
+    ? project.categorySlug
+    : fallback.categorySlug;
+  const images = normalizeProjectImages(project?.images, project?.image, fallback.image);
+  const title = normalizeLocalizedField(project?.title, fallback.title);
+  const alt = normalizeLocalizedField(project?.alt, fallback.alt);
+
+  return {
+    id: slugifyProjectId(project?.id || getLocalizedProjectValue(title, "en") || fallback.title),
+    title,
+    categorySlug,
+    image: images[0],
+    images,
+    alt,
+    number: String(project?.number || fallback.number),
+  };
+}
+
+function getStoredProjects() {
+  return projectCatalogCache;
+}
+
+function saveStoredProjects(projects) {
+  try {
+    window.localStorage.setItem(projectStorageKey, JSON.stringify(projects));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function getCategoryLabel(categorySlug) {
+  const localizedCategory = categoryPageTranslations[currentLanguage]?.categories?.[categorySlug];
+  const defaultCategory = categoryPageTranslations.en.categories[categorySlug];
+  return localizedCategory?.heroTitle || defaultCategory?.heroTitle || categorySlug;
+}
+
+async function loadProjectsFromRepository() {
+  if (projectsDataLoaded) {
+    return projectCatalogCache;
+  }
+
+  try {
+    const response = await fetch(getProjectsDataHref(), { cache: "no-store" });
+
+    if (!response.ok) {
+      throw new Error("Failed to load projects data");
+    }
+
+    const payload = await response.json();
+    const projects = Array.isArray(payload?.projects) ? payload.projects : [];
+
+    if (!projects.length) {
+      throw new Error("Projects data is empty");
+    }
+
+    projectCatalogCache = projects.map((project, index) => normalizeProject(project, index));
+  } catch {
+    projectCatalogCache = defaultProjectCatalog.map((project, index) => normalizeProject(project, index));
+  }
+
+  projectsDataLoaded = true;
+  return projectCatalogCache;
+}
+
+function getCategoryPageHref(categorySlug) {
+  const relativePrefixes = {
+    home: "./",
+    projects: "../",
+    services: "../",
+    category: "../../",
+    admin: "../",
+  };
+
+  const prefix = relativePrefixes[bodyPage] || "./";
+  return `${prefix}categories/${categorySlug}/index.html`;
+}
+
+function getProjectsDataHref() {
+  const relativePaths = {
+    home: "./data/projects.json",
+    projects: "../data/projects.json",
+    about: "../data/projects.json",
+    services: "../data/projects.json",
+    contact: "../data/projects.json",
+    category: "../../data/projects.json",
+    admin: "../data/projects.json",
+  };
+
+  return relativePaths[bodyPage] || "./data/projects.json";
+}
+
+function getAdminPageHref() {
+  const relativePrefixes = {
+    home: "./admin/index.html",
+    projects: "../admin/index.html",
+    about: "../admin/index.html",
+    services: "../admin/index.html",
+    contact: "../admin/index.html",
+    category: "../../admin/index.html",
+    admin: "../admin/index.html",
+  };
+
+  return relativePrefixes[bodyPage] || "./admin/index.html";
+}
+
+function getHomePageHref() {
+  const relativePrefixes = {
+    home: "./index.html",
+    projects: "../index.html",
+    about: "../index.html",
+    services: "../index.html",
+    contact: "../index.html",
+    category: "../../index.html",
+    admin: "../index.html",
+  };
+
+  return relativePrefixes[bodyPage] || "./index.html";
+}
+
+function hasAdminAccess() {
+  return window.sessionStorage.getItem(adminAccessSessionKey) === "granted";
+}
+
+function grantAdminAccess() {
+  window.sessionStorage.setItem(adminAccessSessionKey, "granted");
+  window.location.href = buildLocalizedHref(getAdminPageHref(), currentLanguage);
+}
+
+function resetHiddenAdminSequence() {
+  adminAccessBuffer = "";
+  window.clearTimeout(adminAccessTimer);
+}
+
+function initializeHiddenAdminAccess() {
+  if (document.body.dataset.adminShortcutBound === "true") {
+    return;
+  }
+
+  document.body.dataset.adminShortcutBound = "true";
+
+  document.addEventListener("keydown", (event) => {
+    const isTypingTarget =
+      event.target instanceof HTMLElement
+      && (event.target.isContentEditable
+        || ["INPUT", "TEXTAREA", "SELECT"].includes(event.target.tagName));
+
+    if (isTypingTarget) {
+      return;
+    }
+
+    if (event.ctrlKey || event.metaKey || event.altKey) {
+      resetHiddenAdminSequence();
+      return;
+    }
+
+    if (event.key.length !== 1) {
+      return;
+    }
+
+    adminAccessBuffer = `${adminAccessBuffer}${event.key.toLowerCase()}`.slice(-adminSecretPhrase.length);
+    window.clearTimeout(adminAccessTimer);
+    adminAccessTimer = window.setTimeout(resetHiddenAdminSequence, 3200);
+
+    if (adminAccessBuffer === adminSecretPhrase) {
+      resetHiddenAdminSequence();
+      grantAdminAccess();
+    }
+  });
+}
+
+function enforceAdminAccess() {
+  if (bodyPage !== "admin" || hasAdminAccess()) {
+    return;
+  }
+
+  window.location.replace(buildLocalizedHref(getHomePageHref(), currentLanguage));
+}
+
+function getProjectEmptyStateText() {
+  return currentLanguage === "sq" ? "Nuk ka projekte ende." : "No projects yet.";
+}
+
+function buildProjectCardMarkup(project, options = {}) {
+  const categoryLabel = escapeHtml(getCategoryLabel(project.categorySlug));
+  const projectTitle = escapeHtml(getLocalizedProjectValue(project.title));
+  const projectAlt = escapeHtml(getLocalizedProjectValue(project.alt));
+  const cardAttributes = [
+    `class="project-card${options.clickable ? " project-card-clickable" : ""}"`,
+    `data-filter-category="${escapeHtml(categoryLabel)}"`,
+    `data-category-label="${escapeHtml(categoryLabel)}"`,
+  ];
+
+  if (options.clickable) {
+    cardAttributes.push(`data-category-href="${escapeHtml(getCategoryPageHref(project.categorySlug))}"`);
+  }
+
+  return `
+    <article ${cardAttributes.join(" ")}>
+      <img src="${escapeHtml(project.image)}" alt="${projectAlt}" />
+      <div class="project-copy">
+        <div>
+          <h3>${projectTitle}</h3>
+          <p>${categoryLabel}</p>
+        </div>
+        <span>${escapeHtml(project.number)}</span>
+      </div>
+    </article>
+  `;
+}
+
+function renderHomeProjects() {
+  const homeGrid = document.querySelector(".projects .project-grid");
+
+  if (!homeGrid) {
+    return;
+  }
+
+  const projects = getStoredProjects();
+  homeGrid.innerHTML = projects.length
+    ? projects.map((project) => buildProjectCardMarkup(project, { clickable: true })).join("")
+    : `<p class="empty-state">${escapeHtml(getProjectEmptyStateText())}</p>`;
+}
+
+function renderProjectsPageContent() {
+  const groupsContainer = document.querySelector(".project-groups");
+
+  if (!groupsContainer) {
+    return;
+  }
+
+  const projects = getStoredProjects();
+  const categoryLinkText =
+    (categoryPageTranslations[currentLanguage] || categoryPageTranslations.en).openCategoryPage;
+  const groupedMarkup = categoryOrder
+    .map((categorySlug) => {
+      const categoryProjects = projects.filter((project) => project.categorySlug === categorySlug);
+
+      if (!categoryProjects.length) {
+        return "";
+      }
+
+      const categoryLabel = escapeHtml(getCategoryLabel(categorySlug));
+
+      return `
+        <section class="project-group" data-filter-category="${categoryLabel}">
+          <div class="project-group-heading">
+            <h3>${categoryLabel}</h3>
+            <a class="inline-link category-heading-link" href="${escapeHtml(getCategoryPageHref(categorySlug))}">
+              ${escapeHtml(categoryLinkText)}
+            </a>
+          </div>
+          <div class="project-grid project-grid-group project-grid-expanded">
+            ${categoryProjects.map((project) => buildProjectCardMarkup(project)).join("")}
+          </div>
+        </section>
+      `;
+    })
+    .join("");
+
+  groupsContainer.innerHTML = groupedMarkup || `<p class="empty-state">${escapeHtml(getProjectEmptyStateText())}</p>`;
+}
+
+function renderCategoryProjects() {
+  const relatedGrid = document.querySelector("main .section:nth-of-type(2) .project-grid");
+  const categoryKey = document.body.dataset.category;
+
+  if (!relatedGrid || !categoryKey) {
+    return;
+  }
+
+  const projects = getStoredProjects().filter((project) => project.categorySlug === categoryKey);
+  relatedGrid.innerHTML = projects.length
+    ? projects.map((project) => buildProjectCardMarkup(project)).join("")
+    : `<p class="empty-state">${escapeHtml(getProjectEmptyStateText())}</p>`;
+}
+
+function getAdminPageCopy() {
+  return adminPageTranslations[currentLanguage] || adminPageTranslations.en;
+}
+
+function setAdminUploadMessage(message = "", state = "") {
+  const uploadNote = document.querySelector("#adminUploadNote");
+
+  if (!(uploadNote instanceof HTMLElement)) {
+    return;
+  }
+
+  if (!message) {
+    uploadNote.hidden = true;
+    uploadNote.textContent = "";
+    delete uploadNote.dataset.state;
+    return;
+  }
+
+  uploadNote.hidden = false;
+  uploadNote.dataset.state = state;
+  uploadNote.textContent = message;
+}
+
+function renderAdminImagePreview() {
+  const previewRoot = document.querySelector("#adminImagePreview");
+
+  if (!(previewRoot instanceof HTMLElement)) {
+    return;
+  }
+
+  const adminCopy = getAdminPageCopy();
+
+  previewRoot.innerHTML = currentAdminImages.length
+    ? currentAdminImages
+      .map((imageSource, index) => `
+        <figure class="admin-image-item">
+          <img src="${escapeHtml(imageSource)}" alt="${escapeHtml(`${adminCopy.labels.images} ${index + 1}`)}" />
+          <figcaption>
+            <span class="admin-image-chip">${escapeHtml(index === 0 ? adminCopy.gallery.cover : `${index + 1}`)}</span>
+            <button type="button" class="admin-image-remove" data-image-index="${index}">
+              ${escapeHtml(adminCopy.gallery.remove)}
+            </button>
+          </figcaption>
+        </figure>
+      `)
+      .join("")
+    : `<p class="empty-state">${escapeHtml(adminCopy.gallery.empty)}</p>`;
+}
+
+async function appendAdminImages(fileList) {
+  const adminCopy = getAdminPageCopy();
+  const nextFiles = Array.from(fileList || []).filter((file) => file.type.startsWith("image/"));
+
+  if (!nextFiles.length) {
+    setAdminUploadMessage(adminCopy.gallery.invalid, "error");
+    return;
+  }
+
+  const imageSources = await Promise.all(nextFiles.map((file) => readImageFileAsDataUrl(file)));
+  currentAdminImages = [...currentAdminImages, ...imageSources];
+  renderAdminImagePreview();
+  setAdminUploadMessage("", "");
+}
+
+function renderAdminProjectList() {
+  const projectList = document.querySelector("#adminProjectList");
+
+  if (!projectList) {
+    return;
+  }
+
+  const adminCopy = getAdminPageCopy();
+  const projects = getStoredProjects();
+
+  if (!projects.length) {
+    projectList.innerHTML = `<p class="empty-state">${escapeHtml(adminCopy.empty)}</p>`;
+    return;
+  }
+
+  projectList.innerHTML = projects
+    .map((project) => {
+      const categoryLabel = escapeHtml(getCategoryLabel(project.categorySlug));
+      const projectTitle = escapeHtml(getLocalizedProjectValue(project.title));
+      return `
+        <article class="admin-project-item">
+          <div>
+            <strong>${projectTitle}</strong>
+            <p>${categoryLabel} · ${escapeHtml(project.number)}</p>
+          </div>
+          <div class="admin-project-actions">
+            <button type="button" class="button button-dark admin-action" data-action="edit" data-project-id="${escapeHtml(project.id)}">
+              ${escapeHtml(adminCopy.buttons.edit)}
+            </button>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+function renderLocalizedAdminFields(fieldName, containerSelector, groupLabel, description, placeholder) {
+  const container = document.querySelector(containerSelector);
+
+  if (!(container instanceof HTMLElement)) {
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="admin-localized-group-heading">
+      <span class="admin-field-label">${escapeHtml(groupLabel)}</span>
+      <p class="admin-localized-note">${escapeHtml(description)}</p>
+    </div>
+    <div class="admin-localized-grid">
+      ${projectTranslationLanguages
+        .map(
+          (language) => `
+            <label class="admin-localized-item">
+              <span class="admin-localized-language">${escapeHtml(getLanguageDisplayLabel(language))}</span>
+              <input
+                type="text"
+                name="${fieldName}.${language}"
+                placeholder="${escapeHtml(placeholder)}"
+                ${language === "en" ? "required" : ""}
+              />
+            </label>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function getLocalizedFormValues(adminForm, fieldName) {
+  return Object.fromEntries(
+    projectTranslationLanguages.map((language) => {
+      const input = adminForm.querySelector(`[name="${fieldName}.${language}"]`);
+      return [language, input instanceof HTMLInputElement ? input.value.trim() : ""];
+    }),
+  );
+}
+
+function setLocalizedFormValues(adminForm, fieldName, values) {
+  const normalizedValues = normalizeLocalizedField(values);
+
+  projectTranslationLanguages.forEach((language) => {
+    const input = adminForm.querySelector(`[name="${fieldName}.${language}"]`);
+    if (input instanceof HTMLInputElement) {
+      input.value = normalizedValues[language] || "";
+    }
+  });
+}
+
+function resetAdminProjectForm() {
+  const adminForm = document.querySelector("#adminProjectForm");
+  if (!(adminForm instanceof HTMLFormElement)) {
+    return;
+  }
+
+  adminForm.reset();
+  const projectIdInput = adminForm.querySelector('input[name="projectId"]');
+  if (projectIdInput instanceof HTMLInputElement) {
+    projectIdInput.value = "";
+  }
+
+  setLocalizedFormValues(adminForm, "title", "");
+  setLocalizedFormValues(adminForm, "alt", "");
+
+  currentAdminImages = [];
+  renderAdminImagePreview();
+  setAdminUploadMessage("", "");
+
+  const submitButton = adminForm.querySelector('button[type="submit"]');
+  const adminCopy = getAdminPageCopy();
+  setText(submitButton, adminCopy.buttons.create);
+}
+
+function fillAdminProjectForm(projectId) {
+  const adminForm = document.querySelector("#adminProjectForm");
+  if (!(adminForm instanceof HTMLFormElement)) {
+    return;
+  }
+
+  const project = getStoredProjects().find((item) => item.id === projectId);
+  if (!project) {
+    return;
+  }
+
+  const projectIdInput = adminForm.querySelector('input[name="projectId"]');
+  const categoryInput = adminForm.querySelector('select[name="categorySlug"]');
+  const numberInput = adminForm.querySelector('input[name="number"]');
+  const submitButton = adminForm.querySelector('button[type="submit"]');
+  const adminCopy = getAdminPageCopy();
+
+  if (projectIdInput instanceof HTMLInputElement) projectIdInput.value = project.id;
+  setLocalizedFormValues(adminForm, "title", project.title);
+  if (categoryInput instanceof HTMLSelectElement) categoryInput.value = project.categorySlug;
+  setLocalizedFormValues(adminForm, "alt", project.alt);
+  if (numberInput instanceof HTMLInputElement) numberInput.value = project.number;
+  currentAdminImages = [...(project.images || [project.image])];
+  renderAdminImagePreview();
+  setAdminUploadMessage("", "");
+  setText(submitButton, adminCopy.buttons.update);
+}
+
+function initializeAdminPanel() {
+  if (bodyPage !== "admin") {
+    return;
+  }
+
+  const adminForm = document.querySelector("#adminProjectForm");
+  const adminList = document.querySelector("#adminProjectList");
+  const cancelButton = document.querySelector("#adminCancelEdit");
+  const imageInput = document.querySelector("#adminImageInput");
+  const dropzone = document.querySelector("#adminDropzone");
+  const imagePreview = document.querySelector("#adminImagePreview");
+  const chooseImagesButton = document.querySelector(".admin-dropzone-button");
+
+  if (!(adminForm instanceof HTMLFormElement) || !(adminList instanceof HTMLElement)) {
+    return;
+  }
+
+  if (dropzone instanceof HTMLElement && imageInput instanceof HTMLInputElement && dropzone.dataset.bound !== "true") {
+    dropzone.dataset.bound = "true";
+
+    const chooseImages = async (files) => {
+      try {
+        await appendAdminImages(files);
+      } catch {
+        setAdminUploadMessage(getAdminPageCopy().gallery.invalid, "error");
+      }
+    };
+
+    if (chooseImagesButton instanceof HTMLButtonElement) {
+      chooseImagesButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        imageInput.click();
+      });
+    }
+
+    dropzone.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      dropzone.classList.add("is-dragover");
+    });
+
+    dropzone.addEventListener("dragleave", () => {
+      dropzone.classList.remove("is-dragover");
+    });
+
+    dropzone.addEventListener("drop", async (event) => {
+      event.preventDefault();
+      dropzone.classList.remove("is-dragover");
+      await chooseImages(event.dataTransfer?.files);
+    });
+
+    imageInput.addEventListener("change", async () => {
+      await chooseImages(imageInput.files);
+      imageInput.value = "";
+    });
+  }
+
+  if (imagePreview instanceof HTMLElement && imagePreview.dataset.bound !== "true") {
+    imagePreview.dataset.bound = "true";
+    imagePreview.addEventListener("click", (event) => {
+      const removeButton = event.target instanceof Element
+        ? event.target.closest("[data-image-index]")
+        : null;
+
+      if (!(removeButton instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      const imageIndex = Number.parseInt(removeButton.dataset.imageIndex || "", 10);
+      if (Number.isNaN(imageIndex)) {
+        return;
+      }
+
+      currentAdminImages = currentAdminImages.filter((_, index) => index !== imageIndex);
+      renderAdminImagePreview();
+    });
+  }
+
+  if (adminForm.dataset.bound !== "true") {
+    adminForm.dataset.bound = "true";
+
+    adminForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(adminForm);
+      const existingId = String(formData.get("projectId") || "").trim();
+      const title = getLocalizedFormValues(adminForm, "title");
+      const categorySlug = String(formData.get("categorySlug") || "exterior").trim();
+      const alt = getLocalizedFormValues(adminForm, "alt");
+      const number = String(formData.get("number") || "").trim();
+
+      if (!currentAdminImages.length) {
+        setAdminUploadMessage(getAdminPageCopy().gallery.required, "error");
+        return;
+      }
+
+      const nextProject = normalizeProject(
+        {
+          id: existingId || getLocalizedProjectValue(title, "en"),
+          title,
+          categorySlug,
+          images: currentAdminImages,
+          alt,
+          number,
+        },
+        0,
+      );
+
+      const projects = getStoredProjects();
+      const updatedProjects = existingId
+        ? projects.map((project) => (project.id === existingId ? nextProject : project))
+        : [...projects, nextProject];
+
+      if (!saveStoredProjects(updatedProjects)) {
+        setAdminUploadMessage(getAdminPageCopy().gallery.storageLimit, "error");
+        return;
+      }
+
+      resetAdminProjectForm();
+      renderAdminProjectList();
+    });
+  }
+
+  if (adminList.dataset.bound !== "true") {
+    adminList.dataset.bound = "true";
+
+    adminList.addEventListener("click", (event) => {
+      const actionButton =
+        event.target instanceof Element
+          ? event.target.closest("[data-action][data-project-id]")
+          : null;
+
+      if (!(actionButton instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      const projectId = actionButton.dataset.projectId;
+      const action = actionButton.dataset.action;
+
+      if (!projectId || !action) {
+        return;
+      }
+
+      if (action === "edit") {
+        fillAdminProjectForm(projectId);
+      }
+    });
+  }
+
+  if (cancelButton instanceof HTMLButtonElement && cancelButton.dataset.bound !== "true") {
+    cancelButton.dataset.bound = "true";
+    cancelButton.addEventListener("click", resetAdminProjectForm);
+  }
+}
 
 function getUrlLanguage() {
   const urlLanguage = new URL(window.location.href).searchParams.get("lang");
@@ -1551,6 +2614,20 @@ function setNodeTextList(nodeList, values) {
     if (values[index] !== undefined) {
       node.textContent = values[index];
     }
+  });
+}
+
+function getCategoryPageCopy() {
+  const categoryKey = document.body.dataset.category;
+  const languageCopy = categoryPageTranslations[currentLanguage] || categoryPageTranslations.en;
+  return languageCopy.categories[categoryKey] || categoryPageTranslations.en.categories[categoryKey];
+}
+
+function applyCategoryLinkText() {
+  const languageCopy = categoryPageTranslations[currentLanguage] || categoryPageTranslations.en;
+
+  document.querySelectorAll(".card-link, .category-heading-link").forEach((link) => {
+    setText(link, languageCopy.openCategoryPage);
   });
 }
 
@@ -1785,21 +2862,27 @@ function initializeLanguageDropdown() {
 
 function applyProjectCards(projects) {
   document.querySelectorAll(".project-card").forEach((card, index) => {
-    const project = projects[index];
+    const projectIndex = Number.parseInt(card.dataset.projectIndex ?? `${index}`, 10);
+    const project = projects[Number.isNaN(projectIndex) ? index : projectIndex];
 
     if (!project) {
       return;
     }
 
     setText(card.querySelector("h3"), project.title);
-    setText(card.querySelector(".project-copy p"), project.category);
+    setText(card.querySelector(".project-copy p"), card.dataset.categoryLabel || project.category);
     setAttr(card.querySelector("img"), "alt", project.alt);
   });
 }
 
 function applyServiceCards(services) {
   document.querySelectorAll(".service-card").forEach((card, index) => {
-    const service = services[index];
+    if (card.dataset.staticContent === "true") {
+      return;
+    }
+
+    const serviceIndex = Number.parseInt(card.dataset.serviceIndex ?? `${index}`, 10);
+    const service = services[Number.isNaN(serviceIndex) ? index : serviceIndex];
 
     if (!service) {
       return;
@@ -1908,6 +2991,7 @@ function applyCommon(copy) {
   setNodeTextList(document.querySelectorAll(".nav-links a"), copy.nav);
   applyFooter(copy);
   applyFormTranslations(copy);
+  applyCategoryLinkText();
 }
 
 function applyHomePage(copy) {
@@ -1926,7 +3010,8 @@ function applyHomePage(copy) {
     setText(sectionHeading.querySelector(".inline-link"), copy.home.discussProject);
   }
 
-  applyProjectCards(copy.projects);
+  renderHomeProjects();
+  initializeHomeProjectCategoryNavigation();
 
   const aboutSection = document.querySelector(".about-copy");
   if (aboutSection) {
@@ -1972,7 +3057,7 @@ function applyProjectsPage(copy) {
     setText(sectionHeading.querySelector(".inline-link"), copy.projectsPage.portfolioLink);
   }
 
-  applyProjectCards(copy.projects);
+  renderProjectsPageContent();
 }
 
 function applyAboutPage(copy) {
@@ -2039,6 +3124,106 @@ function applyContactPage(copy) {
   }
 }
 
+function applyCategoryPage() {
+  const categoryCopy = getCategoryPageCopy();
+
+  if (!categoryCopy) {
+    return;
+  }
+
+  document.title = categoryCopy.title;
+  setAttr(document.querySelector('meta[name="description"]'), "content", categoryCopy.description);
+
+  const heroContent = document.querySelector(".page-hero-content");
+  if (heroContent) {
+    setText(heroContent.querySelector(".eyebrow"), categoryCopy.heroEyebrow);
+    setText(heroContent.querySelector("h1"), categoryCopy.heroTitle);
+    setText(heroContent.querySelector(".hero-text"), categoryCopy.heroText);
+  }
+
+  const categoryCopyBlock = document.querySelector(".category-copy");
+  if (categoryCopyBlock) {
+    setText(categoryCopyBlock.querySelector(".eyebrow"), categoryCopy.overviewEyebrow);
+    setHtml(categoryCopyBlock.querySelector("h2"), categoryCopy.overviewHeading);
+    setText(categoryCopyBlock.querySelector(':scope > p:not(.eyebrow)'), categoryCopy.overviewText);
+    setText(categoryCopyBlock.querySelector(".inline-link"), categoryCopy.cta);
+  }
+
+  const serviceCard = document.querySelector(".category-service-card");
+  if (serviceCard) {
+    setText(serviceCard.querySelector("h3"), categoryCopy.serviceTitle);
+    setText(serviceCard.querySelector("p"), categoryCopy.serviceDescription);
+  }
+
+  const relatedHeading = document.querySelector("main .section:nth-of-type(2) .section-heading");
+  if (relatedHeading) {
+    setText(relatedHeading.querySelector(".eyebrow"), categoryCopy.relatedEyebrow);
+    setHtml(relatedHeading.querySelector("h2"), categoryCopy.relatedHeading);
+    setText(relatedHeading.querySelector(".inline-link"), categoryCopy.allProjects);
+  }
+
+  renderCategoryProjects();
+}
+
+function applyAdminPage() {
+  const adminCopy = getAdminPageCopy();
+  document.title = adminCopy.title;
+  setAttr(document.querySelector('meta[name="description"]'), "content", adminCopy.description);
+
+  setText(document.querySelector(".admin-eyebrow"), adminCopy.eyebrow);
+  setText(document.querySelector(".admin-heading"), adminCopy.heading);
+  setText(document.querySelector(".admin-note"), adminCopy.note);
+  setText(document.querySelector(".admin-form-title"), adminCopy.formTitle);
+  setText(document.querySelector(".admin-list-title"), adminCopy.listTitle);
+
+  const categoryInput = document.querySelector('select[name="categorySlug"]');
+  const numberInput = document.querySelector('input[name="number"]');
+  const staticLabels = document.querySelectorAll(".admin-field-label-static");
+
+  setNodeTextList(staticLabels, [
+    adminCopy.labels.category,
+    adminCopy.labels.images,
+    adminCopy.labels.number,
+  ]);
+
+  renderLocalizedAdminFields(
+    "title",
+    "#adminTitleTranslations",
+    adminCopy.labels.title,
+    adminCopy.localizedFields.title,
+    adminCopy.placeholders.title,
+  );
+  renderLocalizedAdminFields(
+    "alt",
+    "#adminAltTranslations",
+    adminCopy.labels.alt,
+    adminCopy.localizedFields.alt,
+    adminCopy.placeholders.alt,
+  );
+
+  setAttr(numberInput, "placeholder", adminCopy.placeholders.number);
+
+  setText(document.querySelector(".admin-dropzone-title"), adminCopy.gallery.dropTitle);
+  setText(document.querySelector(".admin-dropzone-hint"), adminCopy.gallery.dropHint);
+  setText(document.querySelector(".admin-dropzone-button"), adminCopy.gallery.choose);
+  setText(document.querySelector(".admin-gallery-note"), adminCopy.gallery.help);
+
+  if (categoryInput instanceof HTMLSelectElement) {
+    categoryInput.innerHTML = categoryOrder
+      .map((slug) => `<option value="${escapeHtml(slug)}">${escapeHtml(getCategoryLabel(slug))}</option>`)
+      .join("");
+  }
+
+  setText(document.querySelector("#adminCancelEdit"), adminCopy.buttons.cancel);
+  if (!document.querySelector('input[name="projectId"]')?.value) {
+    setText(document.querySelector('#adminProjectForm button[type="submit"]'), adminCopy.buttons.create);
+  }
+
+  renderAdminImagePreview();
+  renderAdminProjectList();
+  initializeAdminPanel();
+}
+
 function applyTranslations(language) {
   currentLanguage = translations[language] ? language : "en";
   const copy = translations[currentLanguage];
@@ -2055,7 +3240,95 @@ function applyTranslations(language) {
     applyServicesPage(copy);
   } else if (bodyPage === "contact") {
     applyContactPage(copy);
+  } else if (bodyPage === "category") {
+    applyCategoryPage();
+  } else if (bodyPage === "admin") {
+    applyAdminPage();
   }
+}
+
+function initializeCategoryFilters() {
+  document.querySelectorAll(".category-pills").forEach((filterGroup) => {
+    const buttons = Array.from(filterGroup.querySelectorAll(".category-pill[data-category]"));
+
+    if (!buttons.length) {
+      return;
+    }
+
+    buttons.forEach((button) => {
+      button.setAttribute("aria-pressed", "false");
+
+      button.addEventListener("click", () => {
+        const nextCategory = button.dataset.category || "";
+        const activeButton = filterGroup.querySelector(".category-pill.is-active");
+        const currentCategory = activeButton?.dataset.category || "";
+        const shouldReset = currentCategory === nextCategory;
+        const selectedCategory = shouldReset ? "" : nextCategory;
+        const rootSection = filterGroup.closest("section");
+
+        buttons.forEach((item) => {
+          const isActive = !shouldReset && item === button;
+          item.classList.toggle("is-active", isActive);
+          item.setAttribute("aria-pressed", String(isActive));
+        });
+
+        if (!rootSection) {
+          return;
+        }
+
+        rootSection
+          .querySelectorAll("[data-filter-category]")
+          .forEach((element) => {
+            const matches = !selectedCategory || element.dataset.filterCategory === selectedCategory;
+            element.classList.toggle("is-filtered-out", !matches);
+          });
+      });
+    });
+  });
+}
+
+function initializeHomeProjectCategoryNavigation() {
+  if (bodyPage !== "home") {
+    return;
+  }
+
+  document.querySelectorAll(".projects .project-card[data-category-href]").forEach((card) => {
+    if (card.dataset.navigationBound === "true") {
+      return;
+    }
+
+    card.dataset.navigationBound = "true";
+    card.classList.add("project-card-clickable");
+    card.tabIndex = 0;
+    card.setAttribute("role", "link");
+
+    const navigateToCategory = () => {
+      const targetHref = card.dataset.categoryHref;
+
+      if (!targetHref) {
+        return;
+      }
+
+      window.location.href = buildLocalizedHref(targetHref, currentLanguage);
+    };
+
+    card.addEventListener("click", (event) => {
+      if (event.target instanceof Element && event.target.closest("a, button")) {
+        return;
+      }
+
+      navigateToCategory();
+    });
+
+    card.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
+
+      event.preventDefault();
+      navigateToCategory();
+    });
+  });
 }
 
 function getSavedLanguage() {
@@ -2127,8 +3400,18 @@ if (contactForm instanceof HTMLFormElement && formNote) {
 }
 
 const initialLanguage = getPreferredLanguage();
+currentLanguage = initialLanguage;
+enforceAdminAccess();
 window.localStorage.setItem(languageStorageKey, initialLanguage);
 applyTranslations(initialLanguage);
+initializeCategoryFilters();
+initializeHomeProjectCategoryNavigation();
+initializeAdminPanel();
+initializeHiddenAdminAccess();
+loadProjectsFromRepository().then(() => {
+  applyTranslations(currentLanguage);
+  initializeHomeProjectCategoryNavigation();
+});
 
 const observer = new IntersectionObserver(
   (entries) => {

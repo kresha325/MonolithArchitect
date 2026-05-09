@@ -1,0 +1,160 @@
+{
+  "projects": [
+    {
+      "id": "modern-retreat",
+      "title": {
+        "en": "Modern Retreat",
+        "sq": "Modern Retreat",
+        "fr": "Modern Retreat",
+        "de": "Modern Retreat",
+        "ru": "Modern Retreat",
+        "ar": "Modern Retreat",
+        "zh": "Modern Retreat"
+      },
+      "categorySlug": "exterior",
+      "images": [
+        "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "alt": {
+        "en": "Luxury residential villa exterior",
+        "sq": "Luxury residential villa exterior",
+        "fr": "Luxury residential villa exterior",
+        "de": "Luxury residential villa exterior",
+        "ru": "Luxury residential villa exterior",
+        "ar": "Luxury residential villa exterior",
+        "zh": "Luxury residential villa exterior"
+      },
+      "number": "01"
+    },
+    {
+      "id": "city-apartment",
+      "title": {
+        "en": "City Apartment",
+        "sq": "City Apartment",
+        "fr": "City Apartment",
+        "de": "City Apartment",
+        "ru": "City Apartment",
+        "ar": "City Apartment",
+        "zh": "City Apartment"
+      },
+      "categorySlug": "interior",
+      "images": [
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "alt": {
+        "en": "Minimal living room with warm tones",
+        "sq": "Minimal living room with warm tones",
+        "fr": "Minimal living room with warm tones",
+        "de": "Minimal living room with warm tones",
+        "ru": "Minimal living room with warm tones",
+        "ar": "Minimal living room with warm tones",
+        "zh": "Minimal living room with warm tones"
+      },
+      "number": "02"
+    },
+    {
+      "id": "minimal-house",
+      "title": {
+        "en": "Minimal House",
+        "sq": "Minimal House",
+        "fr": "Minimal House",
+        "de": "Minimal House",
+        "ru": "Minimal House",
+        "ar": "Minimal House",
+        "zh": "Minimal House"
+      },
+      "categorySlug": "3d-rendering",
+      "images": [
+        "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "alt": {
+        "en": "Minimal architectural entrance",
+        "sq": "Minimal architectural entrance",
+        "fr": "Minimal architectural entrance",
+        "de": "Minimal architectural entrance",
+        "ru": "Minimal architectural entrance",
+        "ar": "Minimal architectural entrance",
+        "zh": "Minimal architectural entrance"
+      },
+      "number": "03"
+    },
+    {
+      "id": "office-building",
+      "title": {
+        "en": "Office Building",
+        "sq": "Office Building",
+        "fr": "Office Building",
+        "de": "Office Building",
+        "ru": "Office Building",
+        "ar": "Office Building",
+        "zh": "Office Building"
+      },
+      "categorySlug": "exterior",
+      "images": [
+        "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "alt": {
+        "en": "Glass office building facade",
+        "sq": "Glass office building facade",
+        "fr": "Glass office building facade",
+        "de": "Glass office building facade",
+        "ru": "Glass office building facade",
+        "ar": "Glass office building facade",
+        "zh": "Glass office building facade"
+      },
+      "number": "04"
+    },
+    {
+      "id": "modern-kitchen",
+      "title": {
+        "en": "Modern Kitchen",
+        "sq": "Modern Kitchen",
+        "fr": "Modern Kitchen",
+        "de": "Modern Kitchen",
+        "ru": "Modern Kitchen",
+        "ar": "Modern Kitchen",
+        "zh": "Modern Kitchen"
+      },
+      "categorySlug": "interior",
+      "images": [
+        "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "alt": {
+        "en": "Contemporary kitchen interior",
+        "sq": "Contemporary kitchen interior",
+        "fr": "Contemporary kitchen interior",
+        "de": "Contemporary kitchen interior",
+        "ru": "Contemporary kitchen interior",
+        "ar": "Contemporary kitchen interior",
+        "zh": "Contemporary kitchen interior"
+      },
+      "number": "05"
+    },
+    {
+      "id": "hillside-villa",
+      "title": {
+        "en": "Hillside Villa",
+        "sq": "Hillside Villa",
+        "fr": "Hillside Villa",
+        "de": "Hillside Villa",
+        "ru": "Hillside Villa",
+        "ar": "Hillside Villa",
+        "zh": "Hillside Villa"
+      },
+      "categorySlug": "3d-animation",
+      "images": [
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "alt": {
+        "en": "Warm bedroom interior with soft natural light",
+        "sq": "Warm bedroom interior with soft natural light",
+        "fr": "Warm bedroom interior with soft natural light",
+        "de": "Warm bedroom interior with soft natural light",
+        "ru": "Warm bedroom interior with soft natural light",
+        "ar": "Warm bedroom interior with soft natural light",
+        "zh": "Warm bedroom interior with soft natural light"
+      },
+      "number": "06"
+    }
+  ]
+}

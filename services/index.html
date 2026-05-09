@@ -85,8 +85,51 @@
     </header>
     <main>
       <section class="section shell">
+        <div class="section-heading compact section-heading-stacked">
+          <div class="section-heading-copy">
+            <p class="eyebrow eyebrow-dark">Service Categories</p>
+            <h2 class="section-title-wide">
+              <span>Focused visualization</span>
+              <span>and design services.</span>
+            </h2>
+            <div class="category-pills" aria-label="Service categories">
+              <button
+                class="category-pill"
+                type="button"
+                data-category="Exterior"
+              >
+                Exterior
+              </button>
+              <button
+                class="category-pill"
+                type="button"
+                data-category="Interior"
+              >
+                Interior
+              </button>
+              <button
+                class="category-pill"
+                type="button"
+                data-category="3D Rendering"
+              >
+                3D Rendering
+              </button>
+              <button
+                class="category-pill"
+                type="button"
+                data-category="3D Animation"
+              >
+                3D Animation
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="services-grid services-grid-page">
-          <article class="service-card">
+          <article
+            class="service-card"
+            data-static-content="true"
+            data-filter-category="Exterior"
+          >
             <span class="service-icon" aria-hidden="true">
               <svg viewBox="0 0 48 48" role="img">
                 <path d="M8 34 24 12l16 22" />
@@ -95,13 +138,20 @@
                 <path d="M18 23h12" />
               </svg>
             </span>
-            <h3>Architecture</h3>
+            <h3>Exterior</h3>
+            <a class="card-link" href="../categories/exterior/index.html"
+              >Open category page</a
+            >
             <p>
-              Concept design, schematic planning, technical development, and
-              design direction for premium private and commercial projects.
+              Facade studies, massing, material palettes, and exterior design
+              development for residential and commercial projects.
             </p>
           </article>
-          <article class="service-card">
+          <article
+            class="service-card"
+            data-static-content="true"
+            data-filter-category="Interior"
+          >
             <span class="service-icon" aria-hidden="true">
               <svg viewBox="0 0 48 48" role="img">
                 <path d="M13 35h22" />
@@ -111,13 +161,20 @@
                 <path d="M20 24h8" />
               </svg>
             </span>
-            <h3>Interior Design</h3>
+            <h3>Interior</h3>
+            <a class="card-link" href="../categories/interior/index.html"
+              >Open category page</a
+            >
             <p>
-              Spatial planning, material palettes, bespoke detailing, and
-              furnishing concepts that elevate daily living.
+              Interior concepts, moodboards, space planning, and finish
+              selection tailored to the character of each space.
             </p>
           </article>
-          <article class="service-card">
+          <article
+            class="service-card"
+            data-static-content="true"
+            data-filter-category="3D Rendering"
+          >
             <span class="service-icon" aria-hidden="true">
               <svg viewBox="0 0 48 48" role="img">
                 <path d="M10 14h28v20H10z" />
@@ -127,13 +184,20 @@
                 <path d="M10 20h28" />
               </svg>
             </span>
-            <h3>Planning</h3>
+            <h3>3D Rendering</h3>
+            <a class="card-link" href="../categories/3d-rendering/index.html"
+              >Open category page</a
+            >
             <p>
-              Site strategy, program organization, circulation logic, and
-              future-ready planning decisions from the outset.
+              High-detail still visualizations that present lighting, materials,
+              and atmosphere clearly before execution.
             </p>
           </article>
-          <article class="service-card">
+          <article
+            class="service-card"
+            data-static-content="true"
+            data-filter-category="3D Animation"
+          >
             <span class="service-icon" aria-hidden="true">
               <svg viewBox="0 0 48 48" role="img">
                 <path d="M16 10h14l6 6v22H12V10h4" />
@@ -143,10 +207,13 @@
                 <path d="M18 17h7" />
               </svg>
             </span>
-            <h3>Project Management</h3>
+            <h3>3D Animation</h3>
+            <a class="card-link" href="../categories/3d-animation/index.html"
+              >Open category page</a
+            >
             <p>
-              Coordination, consultant communication, timeline control, and
-              design supervision through implementation.
+              Cinematic walkthroughs and animated sequences that communicate
+              scale, movement, and spatial experience.
             </p>
           </article>
         </div>

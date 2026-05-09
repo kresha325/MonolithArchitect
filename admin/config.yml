@@ -1,0 +1,106 @@
+backend:
+  name: github
+  repo: kresha325/MonolithArchitect
+  branch: main
+  # For GitHub Pages you still need an OAuth/auth proxy.
+  # Add its URL here after you deploy it, for example:
+  # base_url: https://your-auth-site.example.com
+  use_graphql: true
+
+media_folder: assets/uploads
+public_folder: /assets/uploads
+site_url: /
+publish_mode: simple
+
+collections:
+  - label: Site Content
+    name: site_content
+    editor:
+      preview: false
+    files:
+      - label: Projects
+        name: projects
+        file: data/projects.json
+        description: "Edit all portfolio projects used across Home, Projects, and category pages."
+        fields:
+          - label: Projects
+            name: projects
+            widget: list
+            summary: "{{fields.number}} - {{fields.title.en}}"
+            fields:
+              - label: Project ID
+                name: id
+                widget: string
+                hint: "Stable unique ID used internally. Keep lowercase and hyphenated."
+              - label: Project Number
+                name: number
+                widget: string
+                hint: "Example: 01"
+              - label: Category
+                name: categorySlug
+                widget: select
+                options:
+                  - { label: Exterior, value: exterior }
+                  - { label: Interior, value: interior }
+                  - { label: 3D Rendering, value: 3d-rendering }
+                  - { label: 3D Animation, value: 3d-animation }
+              - label: Title Translations
+                name: title
+                widget: object
+                fields:
+                  - { label: English, name: en, widget: string }
+                  - {
+                      label: Albanian,
+                      name: sq,
+                      widget: string,
+                      required: false,
+                    }
+                  - { label: French, name: fr, widget: string, required: false }
+                  - { label: German, name: de, widget: string, required: false }
+                  - {
+                      label: Russian,
+                      name: ru,
+                      widget: string,
+                      required: false,
+                    }
+                  - { label: Arabic, name: ar, widget: string, required: false }
+                  - {
+                      label: Chinese,
+                      name: zh,
+                      widget: string,
+                      required: false,
+                    }
+              - label: Alt Text Translations
+                name: alt
+                widget: object
+                fields:
+                  - { label: English, name: en, widget: string }
+                  - {
+                      label: Albanian,
+                      name: sq,
+                      widget: string,
+                      required: false,
+                    }
+                  - { label: French, name: fr, widget: string, required: false }
+                  - { label: German, name: de, widget: string, required: false }
+                  - {
+                      label: Russian,
+                      name: ru,
+                      widget: string,
+                      required: false,
+                    }
+                  - { label: Arabic, name: ar, widget: string, required: false }
+                  - {
+                      label: Chinese,
+                      name: zh,
+                      widget: string,
+                      required: false,
+                    }
+              - label: Images
+                name: images
+                widget: list
+                hint: "The first image is used as the project cover image on the site."
+                field:
+                  label: Image
+                  name: image
+                  widget: image

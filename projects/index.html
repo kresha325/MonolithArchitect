@@ -98,95 +98,216 @@
     <main>
       <section class="section shell">
         <div class="section-heading">
-          <div>
+          <div class="section-heading-copy">
             <p class="eyebrow eyebrow-dark">Portfolio</p>
-            <h2>
+            <h2 class="section-title-wide">
               <span>Our latest architecture</span>
               <span>and interior projects.</span>
             </h2>
+            <div class="category-pills" aria-label="Project categories">
+              <button
+                class="category-pill"
+                type="button"
+                data-category="Exterior"
+              >
+                Exterior
+              </button>
+              <button
+                class="category-pill"
+                type="button"
+                data-category="Interior"
+              >
+                Interior
+              </button>
+              <button
+                class="category-pill"
+                type="button"
+                data-category="3D Rendering"
+              >
+                3D Rendering
+              </button>
+              <button
+                class="category-pill"
+                type="button"
+                data-category="3D Animation"
+              >
+                3D Animation
+              </button>
+            </div>
           </div>
           <a class="inline-link" href="../contact/">Start your project</a>
         </div>
 
-        <div class="project-grid project-grid-expanded">
-          <article class="project-card">
-            <img
-              src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1200&q=80"
-              alt="Luxury residential villa exterior"
-            />
-            <div class="project-copy">
-              <div>
-                <h3>Modern Retreat</h3>
-                <p>Residential</p>
-              </div>
-              <span>01</span>
+        <div class="project-groups">
+          <section
+            class="project-group"
+            data-filter-category="Exterior"
+            aria-labelledby="category-exterior"
+          >
+            <div class="project-group-heading">
+              <h3 id="category-exterior">Exterior</h3>
+              <a
+                class="inline-link category-heading-link"
+                href="../categories/exterior/index.html"
+                >Open category page</a
+              >
             </div>
-          </article>
-          <article class="project-card">
-            <img
-              src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
-              alt="Minimal living room with warm tones"
-            />
-            <div class="project-copy">
-              <div>
-                <h3>City Apartment</h3>
-                <p>Interior</p>
-              </div>
-              <span>02</span>
+            <div class="project-grid project-grid-group project-grid-expanded">
+              <article
+                class="project-card"
+                data-project-index="0"
+                data-category-label="Exterior"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1200&q=80"
+                  alt="Luxury residential villa exterior"
+                />
+                <div class="project-copy">
+                  <div>
+                    <h3>Modern Retreat</h3>
+                    <p>Exterior</p>
+                  </div>
+                  <span>01</span>
+                </div>
+              </article>
+              <article
+                class="project-card"
+                data-project-index="3"
+                data-category-label="Exterior"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80"
+                  alt="Glass office building facade"
+                />
+                <div class="project-copy">
+                  <div>
+                    <h3>Office Building</h3>
+                    <p>Exterior</p>
+                  </div>
+                  <span>04</span>
+                </div>
+              </article>
             </div>
-          </article>
-          <article class="project-card">
-            <img
-              src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80"
-              alt="Minimal architectural entrance"
-            />
-            <div class="project-copy">
-              <div>
-                <h3>Minimal House</h3>
-                <p>Residential</p>
-              </div>
-              <span>03</span>
+          </section>
+
+          <section
+            class="project-group"
+            data-filter-category="Interior"
+            aria-labelledby="category-interior"
+          >
+            <div class="project-group-heading">
+              <h3 id="category-interior">Interior</h3>
+              <a
+                class="inline-link category-heading-link"
+                href="../categories/interior/index.html"
+                >Open category page</a
+              >
             </div>
-          </article>
-          <article class="project-card">
-            <img
-              src="https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80"
-              alt="Glass office building facade"
-            />
-            <div class="project-copy">
-              <div>
-                <h3>Office Building</h3>
-                <p>Commercial</p>
-              </div>
-              <span>04</span>
+            <div class="project-grid project-grid-group project-grid-expanded">
+              <article
+                class="project-card"
+                data-project-index="1"
+                data-category-label="Interior"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+                  alt="Minimal living room with warm tones"
+                />
+                <div class="project-copy">
+                  <div>
+                    <h3>City Apartment</h3>
+                    <p>Interior</p>
+                  </div>
+                  <span>02</span>
+                </div>
+              </article>
+              <article
+                class="project-card"
+                data-project-index="4"
+                data-category-label="Interior"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80"
+                  alt="Contemporary kitchen interior"
+                />
+                <div class="project-copy">
+                  <div>
+                    <h3>Modern Kitchen</h3>
+                    <p>Interior</p>
+                  </div>
+                  <span>05</span>
+                </div>
+              </article>
             </div>
-          </article>
-          <article class="project-card">
-            <img
-              src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80"
-              alt="Contemporary kitchen interior"
-            />
-            <div class="project-copy">
-              <div>
-                <h3>Modern Kitchen</h3>
-                <p>Interior</p>
-              </div>
-              <span>05</span>
+          </section>
+
+          <section
+            class="project-group"
+            data-filter-category="3D Rendering"
+            aria-labelledby="category-rendering"
+          >
+            <div class="project-group-heading">
+              <h3 id="category-rendering">3D Rendering</h3>
+              <a
+                class="inline-link category-heading-link"
+                href="../categories/3d-rendering/index.html"
+                >Open category page</a
+              >
             </div>
-          </article>
-          <article class="project-card">
-            <img
-              src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
-              alt="Warm bedroom interior with soft natural light"
-            />
-            <div class="project-copy">
-              <div>
-                <h3>Hillside Villa</h3>
-                <p>Residential</p>
-              </div>
-              <span>06</span>
+            <div class="project-grid project-grid-group project-grid-expanded">
+              <article
+                class="project-card"
+                data-project-index="2"
+                data-category-label="3D Rendering"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80"
+                  alt="Minimal architectural entrance"
+                />
+                <div class="project-copy">
+                  <div>
+                    <h3>Minimal House</h3>
+                    <p>3D Rendering</p>
+                  </div>
+                  <span>03</span>
+                </div>
+              </article>
             </div>
-          </article>
+          </section>
+
+          <section
+            class="project-group"
+            data-filter-category="3D Animation"
+            aria-labelledby="category-animation"
+          >
+            <div class="project-group-heading">
+              <h3 id="category-animation">3D Animation</h3>
+              <a
+                class="inline-link category-heading-link"
+                href="../categories/3d-animation/index.html"
+                >Open category page</a
+              >
+            </div>
+            <div class="project-grid project-grid-group project-grid-expanded">
+              <article
+                class="project-card"
+                data-project-index="5"
+                data-category-label="3D Animation"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+                  alt="Warm bedroom interior with soft natural light"
+                />
+                <div class="project-copy">
+                  <div>
+                    <h3>Hillside Villa</h3>
+                    <p>3D Animation</p>
+                  </div>
+                  <span>06</span>
+                </div>
+              </article>
+            </div>
+          </section>
         </div>
       </section>
     </main>
