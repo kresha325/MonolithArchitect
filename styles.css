@@ -865,6 +865,14 @@ html[dir="rtl"] .language-dropdown-option.is-selected {
   gap: 10px;
 }
 
+.mobile-category-navbar {
+  display: none;
+}
+
+.category-pills::-webkit-scrollbar {
+  display: none;
+}
+
 .category-pill {
   display: inline-flex;
   align-items: center;
@@ -885,7 +893,9 @@ html[dir="rtl"] .language-dropdown-option.is-selected {
 
 .category-pill:hover,
 .category-pill:focus-visible,
-.category-pill.is-active {
+.category-pill.is-active,
+.category-pill.is-current,
+.category-pill[aria-current="page"] {
   border-color: rgba(190, 162, 113, 0.58);
   background: rgba(190, 162, 113, 0.12);
   color: var(--charcoal);
@@ -1938,13 +1948,55 @@ body[data-page="projects"] .section-title-wide {
     align-items: flex-start;
   }
 
-  .category-pills {
-    gap: 8px;
+  body:not([data-page="admin"]) {
+    padding-bottom: calc(164px + env(safe-area-inset-bottom, 0px));
   }
 
-  .category-pill {
+  .section-heading .category-pills {
+    display: none;
+  }
+
+  .mobile-category-navbar {
+    display: block;
+  }
+
+  .mobile-category-navbar .category-pills {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index: 30;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(17, 18, 20, 0.88);
+    box-shadow: 0 22px 50px rgba(12, 11, 10, 0.24);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+  }
+
+  .mobile-category-navbar .category-pill {
+    min-width: 0;
     width: 100%;
-    justify-content: flex-start;
+    padding: 12px 8px;
+    justify-content: center;
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    line-height: 1.25;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .mobile-category-navbar .category-pill.is-current,
+  .mobile-category-navbar .category-pill[aria-current="page"] {
+    border-color: rgba(190, 162, 113, 0.72);
+    background: rgba(190, 162, 113, 0.22);
+    color: #fff7ea;
   }
 
   .inline-link {

@@ -1986,6 +1986,89 @@ function getProjectsDataHref() {
   return relativePaths[bodyPage] || "./data/projects.json";
 }
 
+function getCategorySlugFromButton(button, index) {
+  if (!(button instanceof HTMLElement)) {
+    return "";
+  }
+
+  const explicitSlug = String(button.dataset.categorySlug || "").trim();
+
+  if (categoryOrder.includes(explicitSlug)) {
+    return explicitSlug;
+  }
+
+  return categoryOrder[index] || "";
+}
+
+function isCurrentCategorySlug(categorySlug) {
+  return bodyPage === "category" && document.body.dataset.category === categorySlug;
+}
+
+function createCategoryPillButton(categorySlug) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "category-pill";
+  button.dataset.categorySlug = categorySlug;
+  return button;
+}
+
+function syncCategoryPillGroup(filterGroup) {
+  const buttons = Array.from(filterGroup.querySelectorAll(".category-pill"));
+
+  buttons.forEach((button, index) => {
+    const categorySlug = getCategorySlugFromButton(button, index);
+
+    if (!categorySlug) {
+      return;
+    }
+
+    const isCurrent = isCurrentCategorySlug(categorySlug);
+
+    button.dataset.categorySlug = categorySlug;
+    button.dataset.category = getCategoryLabel(categorySlug);
+    button.textContent = getCategoryLabel(categorySlug);
+    button.setAttribute("aria-pressed", "false");
+    button.classList.toggle("is-current", isCurrent);
+
+    if (isCurrent) {
+      button.setAttribute("aria-current", "page");
+    } else {
+      button.removeAttribute("aria-current");
+    }
+  });
+}
+
+function ensureMobileCategoryNavbar() {
+  if (bodyPage === "admin") {
+    return;
+  }
+
+  let mobileNavbar = document.querySelector(".mobile-category-navbar");
+
+  if (!mobileNavbar) {
+    mobileNavbar = document.createElement("nav");
+    mobileNavbar.className = "mobile-category-navbar";
+    mobileNavbar.setAttribute("aria-label", "Category navigation");
+
+    const pills = document.createElement("div");
+    pills.className = "category-pills";
+    pills.setAttribute("aria-label", "Category navigation");
+
+    categoryOrder.forEach((categorySlug) => {
+      pills.append(createCategoryPillButton(categorySlug));
+    });
+
+    mobileNavbar.append(pills);
+    document.body.append(mobileNavbar);
+  }
+
+  const pillsGroup = mobileNavbar.querySelector(".category-pills");
+
+  if (pillsGroup) {
+    syncCategoryPillGroup(pillsGroup);
+  }
+}
+
 function getProjectEmptyStateText() {
   return currentLanguage === "sq" ? "Nuk ka projekte ende." : "No projects yet.";
 }
@@ -3157,43 +3240,33 @@ function applyTranslations(language) {
 }
 
 function initializeCategoryFilters() {
-  document.querySelectorAll(".category-pills").forEach((filterGroup) => {
-    const buttons = Array.from(filterGroup.querySelectorAll(".category-pill[data-category]"));
+  if (document.body.dataset.categoryNavigationBound !== "true") {
+    document.body.dataset.categoryNavigationBound = "true";
 
-    if (!buttons.length) {
-      return;
-    }
+    document.addEventListener("click", (event) => {
+      const button = event.target instanceof Element
+        ? event.target.closest(".category-pill[data-category-slug]")
+        : null;
 
-    buttons.forEach((button) => {
-      button.setAttribute("aria-pressed", "false");
+      if (!(button instanceof HTMLButtonElement)) {
+        return;
+      }
 
-      button.addEventListener("click", () => {
-        const nextCategory = button.dataset.category || "";
-        const activeButton = filterGroup.querySelector(".category-pill.is-active");
-        const currentCategory = activeButton?.dataset.category || "";
-        const shouldReset = currentCategory === nextCategory;
-        const selectedCategory = shouldReset ? "" : nextCategory;
-        const rootSection = filterGroup.closest("section");
+      const categorySlug = String(button.dataset.categorySlug || "").trim();
 
-        buttons.forEach((item) => {
-          const isActive = !shouldReset && item === button;
-          item.classList.toggle("is-active", isActive);
-          item.setAttribute("aria-pressed", String(isActive));
-        });
+      if (!categorySlug) {
+        return;
+      }
 
-        if (!rootSection) {
-          return;
-        }
-
-        rootSection
-          .querySelectorAll("[data-filter-category]")
-          .forEach((element) => {
-            const matches = !selectedCategory || element.dataset.filterCategory === selectedCategory;
-            element.classList.toggle("is-filtered-out", !matches);
-          });
-      });
+      window.location.href = buildLocalizedHref(getCategoryPageHref(categorySlug), currentLanguage);
     });
+  }
+
+  document.querySelectorAll(".category-pills").forEach((filterGroup) => {
+    syncCategoryPillGroup(filterGroup);
   });
+
+  ensureMobileCategoryNavbar();
 }
 
 function initializeHomeProjectCategoryNavigation() {
