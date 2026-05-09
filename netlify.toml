@@ -1,0 +1,42 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/exterior"
+  to = "/exterior/"
+  status = 301
+
+[[redirects]]
+  from = "/interior"
+  to = "/interior/"
+  status = 301
+
+[[redirects]]
+  from = "/3d-rendering"
+  to = "/3d-rendering/"
+  status = 301
+
+[[redirects]]
+  from = "/3d-animation"
+  to = "/3d-animation/"
+  status = 301
+
+[[redirects]]
+  from = "/exterior/"
+  to = "/categories/exterior/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/interior/"
+  to = "/categories/interior/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/3d-rendering/"
+  to = "/categories/3d-rendering/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/3d-animation/"
+  to = "/categories/3d-animation/index.html"
+  status = 200

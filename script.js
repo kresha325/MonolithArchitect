@@ -1969,7 +1969,7 @@ function getCategoryPageHref(categorySlug) {
   };
 
   const prefix = relativePrefixes[bodyPage] || "./";
-  return `${prefix}categories/${categorySlug}/index.html`;
+  return `${prefix}${categorySlug}/`;
 }
 
 function getProjectsDataHref() {
